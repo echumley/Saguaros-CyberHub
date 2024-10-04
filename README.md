@@ -24,3 +24,14 @@ Here are the main components that will make up the CyberHub:
 
 ## Network Diagram
 ![alt text](https://github.com/echumley/The-CyberHub/blob/f8049c57394e33b6164e692e35cd060c55848872/CyberHub%20Network%20v1.drawio.png)
+
+## Range Types
+
+Below is a general list of planned range types or "lanes." These are isolated networks in which one player or team will connect to access their target machines(s).
+
+1. Single player vs. single target
+2. Single player vs. multiple targets/network
+3. Multiple players vs. single target (King of the Hill)
+4. Team vs. single target
+5. Team vs. multiple targets/network
+6. Team vs. Team (Attack-Defend)
