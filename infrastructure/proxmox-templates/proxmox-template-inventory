@@ -1,2 +1,0 @@
-[all]
-10.1.10.200 ansble_ssh_host=ubuntu-template-1 ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key

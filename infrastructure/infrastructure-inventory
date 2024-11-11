@@ -1,0 +1,54 @@
+[all]
+prox-templates
+auth
+internal-services
+external-access
+extra-services
+range
+
+[proxmox-templates]
+10.1.10.100 ansble_ssh_host=ubuntu-template-1.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
+10.1.10.100 ansble_ssh_host=rocky-template-1.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
+10.1.10.100 ansble_ssh_host=debian-template-1.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
+10.1.10.100 ansble_ssh_host=-template-1.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
+
+[auth]
+10.1.10.110 ansble_ssh_host=openldap-1.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
+10.1.10.111 ansble_ssh_host=openldap-2.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
+10.1.10.112 ansble_ssh_host=keycloak-1.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
+10.1.10.113 ansble_ssh_host=keycloak-2.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
+10.1.10.114 ansble_ssh_host=freeipa-1.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key # Might not need Kerberos if using SSO via Keycloack
+10.1.10.115 ansble_ssh_host=freeipa-2.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
+10.1.10.116 ansble_ssh_host=sssd.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key # Client-side = No need for redundancy
+10.1.10.117 ansble_ssh_host=samba-1.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
+10.1.10.118 ansble_ssh_host=samba-2.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
+
+[internal-services]
+10.1.20.120 ansble_ssh_host=homepage.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
+10.1.20.121 ansble_ssh_host=rsyslog.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
+10.1.20.122 ansble_ssh_host=wazuh.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
+10.1.20.123 ansble_ssh_host=zeek.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
+10.1.20.124 ansble_ssh_host=prometheus.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
+10.1.20.125 ansble_ssh_host=crowdsec.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
+10.1.20.126 ansble_ssh_host=grafana.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
+10.1.20.127 ansble_ssh_host=shuffle.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
+10.1.20.128 ansble_ssh_host=bitwarden-1.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
+10.1.20.129 ansble_ssh_host=bitwarden-2.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
+
+[external-access]
+10.1.60.160 ansble_ssh_host=traefik-1.saguaroscyberhub.org ansible_ssh_user=range-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/range-ansible-key
+10.1.60.161 ansble_ssh_host=traefik-2.saguaroscyberhub.org ansible_ssh_user=range-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/range-ansible-key
+10.1.60.162 ansble_ssh_host=cyberhub-1.saguaroscyberhub.org ansible_ssh_user=range-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/range-ansible-key
+10.1.60.163 ansble_ssh_host=cyberhub-2.saguaroscyberhub.org ansible_ssh_user=range-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/range-ansible-key
+
+[extra-services]
+10.1.60.164 ansble_ssh_host=apacheguac.saguaroscyberhub.org ansible_ssh_user=range-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/range-ansible-key
+10.1.60.165 ansble_ssh_host=moodle.saguaroscyberhub.org ansible_ssh_user=range-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/range-ansible-key
+10.1.60.166 ansble_ssh_host=calibreweb.saguaroscyberhub.org ansible_ssh_user=range-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/range-ansible-key
+10.1.60.167 ansble_ssh_host=mdbooks.saguaroscyberhub.org ansible_ssh_user=range-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/range-ansible-key
+
+[range]
+10.1.70.170 ansble_ssh_host=ctfd.saguaroscyberhub.org ansible_ssh_user=range-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/range-ansible-key
+10.1.70.171 ansble_ssh_host=openvpn.saguaroscyberhub.org ansible_ssh_user=range-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/range-ansible-key
+10.1.70.172 ansble_ssh_host=range-management-1.saguaroscyberhub.org ansible_ssh_user=range-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/range-ansible-key
+10.1.70.173 ansble_ssh_host=range-management-2.saguaroscyberhub.org ansible_ssh_user=range-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/range-ansible-key
