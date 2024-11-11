@@ -115,7 +115,7 @@
         - "/root"
         - "/home/{{ item }}"
       loop:
-        - user # Add other usernames as needed
+        - cactus-admin # Add other usernames as needed
       tags: cleanup
 
     # Delete machine-id and recreate symbolic link if needed
