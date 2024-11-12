@@ -4,7 +4,7 @@ auth
 internal-services
 external-access
 extra-services
-range
+the-crucible
 
 [proxmox-templates]
 10.1.10.100 ansble_ssh_host=ubuntu-template-1.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
@@ -36,19 +36,19 @@ range
 10.1.20.129 ansble_ssh_host=bitwarden-2.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
 
 [external-access]
-10.1.60.160 ansble_ssh_host=traefik-1.saguaroscyberhub.org ansible_ssh_user=range-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/range-ansible-key
-10.1.60.161 ansble_ssh_host=traefik-2.saguaroscyberhub.org ansible_ssh_user=range-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/range-ansible-key
-10.1.60.162 ansble_ssh_host=cyberhub-1.saguaroscyberhub.org ansible_ssh_user=range-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/range-ansible-key
-10.1.60.163 ansble_ssh_host=cyberhub-2.saguaroscyberhub.org ansible_ssh_user=range-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/range-ansible-key
+10.1.60.160 ansble_ssh_host=traefik-1.saguaroscyberhub.org ansible_ssh_user=crucible-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/crucible-ansible-key
+10.1.60.161 ansble_ssh_host=traefik-2.saguaroscyberhub.org ansible_ssh_user=crucible-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/crucible-ansible-key
+10.1.60.162 ansble_ssh_host=cyberhub-1.saguaroscyberhub.org ansible_ssh_user=crucible-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/crucible-ansible-key
+10.1.60.163 ansble_ssh_host=cyberhub-2.saguaroscyberhub.org ansible_ssh_user=crucible-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/crucible-ansible-key
 
 [extra-services]
-10.1.60.164 ansble_ssh_host=apacheguac.saguaroscyberhub.org ansible_ssh_user=range-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/range-ansible-key
-10.1.60.165 ansble_ssh_host=moodle.saguaroscyberhub.org ansible_ssh_user=range-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/range-ansible-key
-10.1.60.166 ansble_ssh_host=calibreweb.saguaroscyberhub.org ansible_ssh_user=range-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/range-ansible-key
-10.1.60.167 ansble_ssh_host=mdbooks.saguaroscyberhub.org ansible_ssh_user=range-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/range-ansible-key
+10.1.60.164 ansble_ssh_host=apacheguac.saguaroscyberhub.org ansible_ssh_user=crucible-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/crucible-ansible-key
+10.1.60.165 ansble_ssh_host=moodle.saguaroscyberhub.org ansible_ssh_user=crucible-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/crucible-ansible-key
+10.1.60.166 ansble_ssh_host=calibreweb.saguaroscyberhub.org ansible_ssh_user=crucible-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/crucible-ansible-key
+10.1.60.167 ansble_ssh_host=mdbooks.saguaroscyberhub.org ansible_ssh_user=crucible-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/crucible-ansible-key
 
-[range]
-10.1.70.170 ansble_ssh_host=ctfd.saguaroscyberhub.org ansible_ssh_user=range-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/range-ansible-key
-10.1.70.171 ansble_ssh_host=openvpn.saguaroscyberhub.org ansible_ssh_user=range-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/range-ansible-key
-10.1.70.172 ansble_ssh_host=range-management-1.saguaroscyberhub.org ansible_ssh_user=range-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/range-ansible-key
-10.1.70.173 ansble_ssh_host=range-management-2.saguaroscyberhub.org ansible_ssh_user=range-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/range-ansible-key
+[the-crucible]
+10.1.70.170 ansble_ssh_host=ctfd.saguaroscyberhub.org ansible_ssh_user=crucible-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/crucible-ansible-key
+10.1.70.171 ansble_ssh_host=openvpn.saguaroscyberhub.org ansible_ssh_user=crucible-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/crucible-ansible-key
+10.1.70.172 ansble_ssh_host=crucible-management-1.saguaroscyberhub.org ansible_ssh_user=crucible-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/crucible-ansible-key
+10.1.70.173 ansble_ssh_host=crucible-management-2.saguaroscyberhub.org ansible_ssh_user=crucible-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/crucible-ansible-key
