@@ -106,18 +106,6 @@
       loop: "{{ ssh_keys.files }}"
       tags: cleanup
 
-    - name: Remove contents of ~/.ssh/authorized_keys
-      become: true
-      file:
-        path: "{{ item }}/.ssh/authorized_keys"
-        state: absent
-      with_items:
-        - "/root"
-        - "/home/{{ item }}"
-      loop:
-        - cactus-admin # Add other usernames as needed
-      tags: cleanup
-
     # Delete machine-id and recreate symbolic link if needed
     - name: Truncate /etc/machine-id to zero length
       copy:
