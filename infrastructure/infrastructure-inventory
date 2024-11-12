@@ -8,9 +8,9 @@ range
 
 [proxmox-templates]
 10.1.10.100 ansble_ssh_host=ubuntu-template-1.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
-10.1.10.100 ansble_ssh_host=rocky-template-1.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
-10.1.10.100 ansble_ssh_host=debian-template-1.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
-10.1.10.100 ansble_ssh_host=-template-1.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
+10.1.10.101 ansble_ssh_host=rocky-template-1.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
+10.1.10.102 ansble_ssh_host=debian-template-1.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
+10.1.10.103 ansble_ssh_host=-template-1.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
 
 [auth]
 10.1.10.110 ansble_ssh_host=openldap-1.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
