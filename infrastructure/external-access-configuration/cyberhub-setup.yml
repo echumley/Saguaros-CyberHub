@@ -1,8 +1,8 @@
 ---
-- name: Deploy OpenLDAP & configure host
+- name: Deploy CyberHub website & configure host
   hosts:
-    - openldap-1.saguaroscyberhub.org
-    - openldap-2.saguaroscyberhub.org
+    - cyberhub-1.saguaroscyberhub.org
+    - cyberhub-2.saguaroscyberhub.org
   vars:
     ansible_ssh_user: cactus-admin
     ansible_ssh_private_key_file: /Users/Ethan/.ssh/saguaros-ansible-key
