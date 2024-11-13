@@ -1,8 +1,8 @@
 ---
-- name: Deploy range management & configure host
+- name: Deploy The Crucible management & configure host
   hosts:
-    - range-management-1.saguaroscyberhub.org
-    - range-management-2.saguaroscyberhub.org
+    - crucible-management-1.saguaroscyberhub.org
+    - crucible-management-2.saguaroscyberhub.org
   vars:
     ansible_ssh_user: cactus-admin
     ansible_ssh_private_key_file: /Users/Ethan/.ssh/saguaros-ansible-key
