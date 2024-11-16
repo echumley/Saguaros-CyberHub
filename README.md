@@ -9,13 +9,6 @@ The Saguaros CyberHub is the official cyber warfare range and eLearning platform
 2. Create a training model & environment for club Capture the Flag (CTF) teams.
 3. Stay free for club members.
 
-## Project Ethos
-
-Our goal is to follow this set of ethos set by the team:
-1. Use free, open-source software wherever possible.
-2. Keep the project portable for use on any hardware platform by utilizing IAC and scripts.
-3. Keep any deployment of the project free for students.
-
 ## Project Components
 
 Here are the main components that will make up the CyberHub:
@@ -42,3 +35,10 @@ Below is a general list of planned range types or "lanes." These are isolated ne
 4. Team vs. single target
 5. Team vs. multiple targets/network
 6. Team vs. Team (Attack-Defend)
+
+## Project Ethos
+
+Our goal is to follow this set of ethos set by the team:
+1. Use free, open-source software wherever possible.
+2. Keep the project portable for use on any hardware platform by utilizing IAC and scripts.
+3. Keep any deployment of the project free for students.
