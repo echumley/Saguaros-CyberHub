@@ -1,0 +1,156 @@
+# -------- WIP / DO NOT USE --------
+# NEEDS MORE TESTING
+---
+- name: Create ideal Linux Proxmox template
+  hosts: all
+  become: true
+  tasks:
+
+    # Installs updates
+    - name: Install updates on Debian
+      package:
+        upgrade: dist
+        update_cache: true
+      tags: always
+
+    # Installs and starts required software packages
+    - name: Install QEMU Guest Agent, Cloud-Init, and Unattended Upgrades on Debian
+      apt:
+        name:
+          - qemu-guest-agent
+          - cloud-init
+          - unattended-upgrades
+        state: present
+        update_cache: yes
+      tags: always
+
+    - name: Enable and start QEMU Guest Agent
+      systemd:
+        name: qemu-guest-agent
+        enabled: yes
+        state: stopped
+      tags: always
+
+    # Configures and enables UFW
+    - name: Allow SSH from specific subnet
+      ansible.builtin.ufw:
+        rule: allow
+        proto: tcp
+        from_ip: 10.1.10.0/24
+        port: '22'
+
+    - name: Enable UFW firewall
+      ansible.builtin.ufw:
+        state: enabled
+
+    # Sets current timezone
+    - name: Check the current timezone
+      ansible.builtin.command: timedatectl
+      register: timezone_output
+
+    - name: Set timezone to America/Phoenix
+      ansible.builtin.command: timedatectl set-timezone America/Phoenix
+      when: "'America/Phoenix' not in timezone_output.stdout"
+
+    # Configures SSH configuration to disable root login and password authentication
+    - name: Configure SSH
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: "{{ item.regexp }}"
+        line: "{{ item.line }}"
+        state: present
+        create: yes
+      loop:
+        - { regexp: '^#?PermitRootLogin', line: 'PermitRootLogin no' }
+        - { regexp: '^#?PasswordAuthentication', line: 'PasswordAuthentication no' }
+        - { regexp: '^#?PubkeyAuthentication', line: 'PubkeyAuthentication yes' }
+        - { regexp: '^#?MaxAuthTries', line: 'MaxAuthTries 9' }
+
+    # Enable automatic updates for security updates on Ubuntu
+    - name: Configure unattended-upgrades settings
+      ansible.builtin.lineinfile:
+        path: /etc/apt/apt.conf.d/20auto-upgrades
+        regexp: '^{{ item.regexp }}'
+        line: '{{ item.line }}'
+        state: present
+      loop:
+        - { regexp: 'APT::Periodic::Update-Package-Lists', line: 'APT::Periodic::Update-Package-Lists "1";' }
+        - { regexp: 'APT::Periodic::Unattended-Upgrade', line: 'APT::Periodic::Unattended-Upgrade "1";' }
+        - { regexp: 'APT::Periodic::Download-Upgradeable-Packages', line: 'APT::Periodic::Download-Upgradeable-Packages "1";' }
+        - { regexp: 'APT::Periodic::AutocleanInterval', line: 'APT::Periodic::AutocleanInterval "7";' }
+
+    - name: Ensure PasswordAuthentication is set to no
+      lineinfile:
+        path: /etc/ssh/sshd_config.d/50-cloud-init.conf
+        regexp: '^PasswordAuthentication\s+yes'
+        line: 'PasswordAuthentication no'
+        backup: yes
+
+    # Reboots the system to enable the changes
+    - name: Reboot system
+      reboot:
+        msg: "Reboot initialized by Ansible playbook..."
+        reboot_timeout: 600
+      tags: always
+
+    # Delete SSH Host Keys
+    - name: Find SSH host keys
+      find:
+        paths: /etc/ssh
+        patterns: 'ssh_host_*'
+      register: ssh_keys
+
+    - name: Remove SSH host keys
+      become: true
+      file:
+        path: "{{ item.path }}"
+        state: absent
+      loop: "{{ ssh_keys.files }}"
+      tags: cleanup
+
+    # Delete machine-id and recreate symbolic link if needed
+    - name: Truncate /etc/machine-id to zero length
+      copy:
+        content: ""
+        dest: /etc/machine-id
+        owner: root
+        group: root
+        mode: '0644'
+      tags: cleanup
+
+    - name: Recreate symbolic link for /etc/machine-id to /var/lib/dbus/machine-id
+      file:
+        src: /etc/machine-id
+        dest: /var/lib/dbus/machine-id
+        state: link
+      tags: cleanup
+
+    # Enable SSH
+    - name: Ensure SSH service is enabled and started
+      systemd:
+        name: ssh
+        enabled: yes
+        state: started
+      tags: always
+
+    # Clean apt database, orphan packages, and cloud-init
+    - name: Clean the apt database
+      command: apt clean
+      tags: cleanup
+
+    - name: Remove orphan packages
+      apt:
+        autoremove: yes
+        purge: yes
+      tags: cleanup
+
+    - name: Clean cloud-init
+      command: cloud-init clean
+      tags: cleanup
+
+    # Shutdown the system
+    - name: Shutdown the system
+      command: poweroff
+      async: 1
+      poll: 0
+      tags: cleanup

@@ -1,0 +1,10 @@
+# -------- WIP / DO NOT USE --------
+version: '3.8'
+
+services:
+  moodleapp:
+    image: moodlehq/moodleapp
+    ports:
+      - "8100:443"
+    restart: always
+    container_name: moodleapp

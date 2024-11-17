@@ -1,0 +1,16 @@
+# -------- WIP / DO NOT USE --------
+version: '3.8'
+
+services:
+  openvpn-as:
+    image: openvpn/openvpn-as
+    container_name: openvpn-as
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - "943:943"
+      - "443:443"
+      - "1194:1194/udp"
+    volumes:
+      - <path to data>:/openvpn
+    restart: unless-stopped
