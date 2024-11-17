@@ -1,0 +1,14 @@
+---
+- name: Deploy Watchtower & configure host
+  hosts: watchtower.saguaroscyberhub.org
+  vars:
+    ansible_ssh_user: cactus-admin
+    ansible_ssh_private_key_file: /Users/Ethan/.ssh/saguaros-ansible-key
+
+  tasks:
+    # Installs updates
+    - name: Install updates on Ubuntu
+      package:
+        upgrade: dist
+        update_cache: true
+      tags: always
