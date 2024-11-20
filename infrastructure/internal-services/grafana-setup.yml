@@ -12,3 +12,5 @@
         upgrade: dist
         update_cache: true
       tags: always
+
+# https://grafana.com/docs/grafana/latest/setup-grafana/installation/docker/#run-grafana-via-docker-compose

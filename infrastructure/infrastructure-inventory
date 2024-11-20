@@ -25,12 +25,12 @@ the-crucible
 
 [internal-services]
 10.1.20.120 ansble_ssh_host=homepage.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
-10.1.20.121 ansble_ssh_host=rsyslog.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
-10.1.20.122 ansble_ssh_host=wazuh.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
-10.1.20.123 ansble_ssh_host=zeek.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
-10.1.20.124 ansble_ssh_host=prometheus.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
-10.1.20.125 ansble_ssh_host=crowdsec.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
-10.1.20.126 ansble_ssh_host=grafana.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
+10.1.20.121 ansble_ssh_host=prometheus.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
+10.1.20.122 ansble_ssh_host=grafana.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
+10.1.20.123 ansble_ssh_host=loki.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
+10.1.20.124 ansble_ssh_host=zeek.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
+10.1.20.125 ansble_ssh_host=wazuh.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
+10.1.20.126 ansble_ssh_host=crowdsec.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
 10.1.20.127 ansble_ssh_host=shuffle.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
 10.1.20.128 ansble_ssh_host=bitwarden-1.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key
 10.1.20.129 ansble_ssh_host=bitwarden-2.saguaroscyberhub.org ansible_ssh_user=cactus-admin ansible_ssh_private_key_file=/Users/Ethan/.ssh/saguaros-ansible-key

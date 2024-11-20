@@ -12,3 +12,6 @@
         upgrade: dist
         update_cache: true
       tags: always
+
+# Install guide for Wazuh over Ansible:
+# https://documentation.wazuh.com/current/deployment-options/deploying-with-ansible/index.html
