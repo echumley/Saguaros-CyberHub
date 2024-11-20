@@ -23,6 +23,7 @@ Here are the main components that will make up the CyberHub:
 ![alt text](https://github.com/echumley/CyberHub-Project/blob/15e9d9d7a948f42f647a059a963ff6719399bc96/CyberHub.png)
 
 ## Network Diagram
+
 ![alt text](https://github.com/echumley/The-CyberHub/blob/f8049c57394e33b6164e692e35cd060c55848872/CyberHub%20Network%20v1.drawio.png)
 
 ## Range Types
@@ -34,7 +35,8 @@ Below is a general list of planned range types or "lanes." These are isolated ne
 3. Multiple players vs. single target (King of the Hill)
 4. Team vs. single target
 5. Team vs. multiple targets/network
-6. Team vs. Team (Attack-Defend)
+6. Team vs. team (Attack-Defend)
+7. Live SOC incident response
 
 ## Project Ethos
 
