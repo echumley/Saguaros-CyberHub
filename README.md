@@ -9,6 +9,13 @@ The Saguaros CyberHub is the official cyber warfare range and eLearning platform
 2. Create a training model & environment for club Capture the Flag (CTF) teams.
 3. Stay free for club members.
 
+## Project Ethos
+
+Our goal is to follow this set of ethos set by the team:
+1. Use free, open-source software wherever possible.
+2. Keep the project portable for use on any hardware platform by utilizing IAC and scripts.
+3. Keep any deployment of the project free for students.
+
 ## Project Components
 
 Here are the main components that will make up the CyberHub:
@@ -26,7 +33,9 @@ Here are the main components that will make up the CyberHub:
 
 ![alt text](https://github.com/echumley/The-CyberHub/blob/f8049c57394e33b6164e692e35cd060c55848872/CyberHub%20Network%20v1.drawio.png)
 
-## Range Types
+## The Hub
+
+### Range Types
 
 Below is a general list of planned range types or "lanes." These are isolated networks in which one player or team will connect to access their target machines(s).
 
@@ -38,9 +47,21 @@ Below is a general list of planned range types or "lanes." These are isolated ne
 6. Team vs. team (Attack-Defend)
 7. Live SOC incident response
 
-## Project Ethos
+### Extra Services
 
-Our goal is to follow this set of ethos set by the team:
-1. Use free, open-source software wherever possible.
-2. Keep the project portable for use on any hardware platform by utilizing IAC and scripts.
-3. Keep any deployment of the project free for students.
+These services will be openly availbe for use by registered players (internally or externally) to assist in CTF competitions.
+
+1. Web-based RDP Kali machine (for those who can't run it locally)
+2. SIEM/SOAR stack (inspired by WRCCDC)
+3. Hashcat server (GPU server running Hashtopolis)
+
+## Saguaros University
+
+### Learning Courses
+
+1. CTF fundamentals
+2. Networking fundementals
+3. Red team fundamentals
+4. Blue team fundamentals
+5. King of the hill fundamentals
+6. Tool spotlights
