@@ -14,7 +14,7 @@ This is a general layout of the network.
 10.1.40.0/24 on VLAN 40: WiFi Network - WiFi network in the case of local CTF events. \
 10.1.50.0/24 on VLAN 50: Lab Network - Used for testing of new services/infrastructure. \
 10.1.60.0/24 on VLAN 60: DMZ Network - All externally-facing services, reverse proxies, CTFd, player OpenVPN, etc. \
-10.1.70-254.0/24 on VLAN 70-254: Range Networks - Used for range lanes, vulnerable VMs, etc. \
+10.1.70-254.0/24 on VLAN 70-254: Range Networks - Used for range lanes, vulnerable VMs, etc.
 
 ### IPs
 
