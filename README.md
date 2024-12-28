@@ -22,8 +22,9 @@ Here are the main components that will make up the CyberHub:
 1. The Hub - The website/landing page where users authorize and get access to the other sections of the CyberHub.
 2. Saguaros University - Moodle eLearning platform (LMS) with courses and digital badges.
 3. The Crucible - A fully featured, CTF-style cyber warfare range with vulnerable hosts, networking devices, and enterprise environments. 
-4. Library - An organized, properly indexed repository of eBooks, PDF guides, and cybersecurity resources.
+4. Library - An organized, properly indexed repository of eBooks, PDF guides, research articles, and cybersecurity resources.
 5. Cyber Wiki - A wiki with vulnerable machine walkthroughs, red/blue team skill playbooks, cheat sheets, and the CyberHub project documentation.
+6. The Archive - A deep archive of malware samples, projects, scrapped data samples, etc.
 
 ## Project Diagram
 
