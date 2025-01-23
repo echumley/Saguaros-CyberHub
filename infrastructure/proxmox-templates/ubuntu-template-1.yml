@@ -30,11 +30,11 @@
       tags: always
 
     # Configures and enables UFW
-    - name: Allow SSH from specific subnet
+    - name: Allow SSH from Trusted subnet
       ansible.builtin.ufw:
         rule: allow
         proto: tcp
-        from_ip: 10.1.10.0/24
+        from_ip: 10.0.30.0/24
         port: '22'
 
     - name: Enable UFW firewall
@@ -104,6 +104,18 @@
         path: "{{ item.path }}"
         state: absent
       loop: "{{ ssh_keys.files }}"
+      tags: cleanup
+
+    - name: Remove contents of ~/.ssh/authorized_keys
+      become: true
+      file:
+        path: "{{ item }}/.ssh/authorized_keys"
+        state: absent
+      with_items:
+        - "/root"
+        - "/home/{{ item }}"
+      loop:
+        - user # Add other usernames as needed
       tags: cleanup
 
     # Delete machine-id and recreate symbolic link if needed
