@@ -10,6 +10,7 @@
       package:
         update_cache: true
         update_only: true
+      when: ansible_distribution == "Rocky"
       tags: always
 
     # Installs and starts required software packages
@@ -21,6 +22,7 @@
           - dnf-automatic
         state: present
         update_cache: yes
+      when: ansible_distribution == "Rocky"
       tags: always
     
     - name: Enable and start QEMU Guest Agent
@@ -37,10 +39,12 @@
         proto: tcp
         from_ip: 10.1.10.0/24
         port: '22'
+      when: ansible_distribution == "Ubuntu"
 
     - name: Enable UFW firewall
       ansible.builtin.ufw:
         state: enabled
+      when: ansible_distribution == "Ubuntu"
 
     # Sets current timezone
     - name: Check the current timezone
@@ -84,6 +88,7 @@
         name: dnf-automatic.timer
         enabled: yes
         state: started
+      when: ansible_distribution == "Rocky"
 
     - name: Ensure PasswordAuthentication is set to no
       lineinfile:
