@@ -1,6 +1,6 @@
 ---
 - name: Create ideal Linux Proxmox template
-  hosts: all
+  hosts: proxmox-templates
   become: true
   tasks:
 
@@ -30,12 +30,15 @@
       tags: always
 
     # Configures and enables UFW
-    - name: Allow SSH from Trusted subnet
+    - name: Allow SSH from multiple trusted subnets
       ansible.builtin.ufw:
         rule: allow
         proto: tcp
-        from_ip: 10.0.30.0/24
+        from_ip: "{{ item }}"
         port: '22'
+      loop:
+        - 10.1.30.0/24 # Trusted network
+        - 10.1.5.0/24  # Admin VPN network
 
     - name: Enable UFW firewall
       ansible.builtin.ufw:
