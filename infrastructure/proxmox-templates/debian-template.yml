@@ -1,14 +1,12 @@
-# -------- WIP / DO NOT USE --------
-# NEEDS MORE TESTING
 ---
-- name: Create ideal Linux Proxmox template
+- name: Create ideal Debian Proxmox template
   hosts: all
   become: true
   tasks:
 
     # Installs updates
     - name: Install updates on Debian
-      package:
+      apt:
         upgrade: dist
         update_cache: true
       tags: always
@@ -28,29 +26,27 @@
       systemd:
         name: qemu-guest-agent
         enabled: yes
-        state: stopped
+        state: started
       tags: always
 
     # Configures and enables UFW
-    - name: Allow SSH from specific subnet
+    - name: Allow SSH from multiple trusted subnets
       ansible.builtin.ufw:
         rule: allow
         proto: tcp
-        from_ip: 10.1.10.0/24
+        from_ip: "{{ item }}"
         port: '22'
+      loop:
+        - 10.1.30.0/24 # Trusted network
+        - 10.1.5.0/24  # Admin VPN network
 
     - name: Enable UFW firewall
       ansible.builtin.ufw:
         state: enabled
 
     # Sets current timezone
-    - name: Check the current timezone
-      ansible.builtin.command: timedatectl
-      register: timezone_output
-
     - name: Set timezone to America/Phoenix
-      ansible.builtin.command: timedatectl set-timezone America/Phoenix
-      when: "'America/Phoenix' not in timezone_output.stdout"
+      command: timedatectl set-timezone America/Phoenix
 
     # Configures SSH configuration to disable root login and password authentication
     - name: Configure SSH
@@ -66,7 +62,7 @@
         - { regexp: '^#?PubkeyAuthentication', line: 'PubkeyAuthentication yes' }
         - { regexp: '^#?MaxAuthTries', line: 'MaxAuthTries 9' }
 
-    # Enable automatic updates for security updates on Ubuntu
+    # Enable automatic updates for security updates on Debian
     - name: Configure unattended-upgrades settings
       ansible.builtin.lineinfile:
         path: /etc/apt/apt.conf.d/20auto-upgrades
@@ -78,13 +74,6 @@
         - { regexp: 'APT::Periodic::Unattended-Upgrade', line: 'APT::Periodic::Unattended-Upgrade "1";' }
         - { regexp: 'APT::Periodic::Download-Upgradeable-Packages', line: 'APT::Periodic::Download-Upgradeable-Packages "1";' }
         - { regexp: 'APT::Periodic::AutocleanInterval', line: 'APT::Periodic::AutocleanInterval "7";' }
-
-    - name: Ensure PasswordAuthentication is set to no
-      lineinfile:
-        path: /etc/ssh/sshd_config.d/50-cloud-init.conf
-        regexp: '^PasswordAuthentication\s+yes'
-        line: 'PasswordAuthentication no'
-        backup: yes
 
     # Reboots the system to enable the changes
     - name: Reboot system
@@ -101,11 +90,19 @@
       register: ssh_keys
 
     - name: Remove SSH host keys
-      become: true
       file:
         path: "{{ item.path }}"
         state: absent
       loop: "{{ ssh_keys.files }}"
+      tags: cleanup
+
+    - name: Remove contents of ~/.ssh/authorized_keys
+      file:
+        path: "{{ item }}/.ssh/authorized_keys"
+        state: absent
+      loop:
+        - "/root"
+        - "/home/{{ item }}"
       tags: cleanup
 
     # Delete machine-id and recreate symbolic link if needed

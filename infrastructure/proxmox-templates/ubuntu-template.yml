@@ -1,6 +1,6 @@
 ---
 - name: Create ideal Linux Proxmox template
-  hosts: proxmox-templates
+  hosts: all
   become: true
   tasks:
 
