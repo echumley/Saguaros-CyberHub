@@ -1,0 +1,126 @@
+--- # Only tested on Ubuntu so far
+- name: Install Docker & Docker Compose, configure UFW, and deploy logging stack
+  hosts: all
+  become: true
+  vars:
+    directories:
+      - /etc/AppData/prometheus
+      - /etc/AppData/loki
+      - /etc/AppData/grafana
+      - /etc/AppData/promtail
+
+    files_to_copy:
+      - { src: "./AppData/prometheus/prometheus.yml", dest: "/etc/AppData/prometheus/prometheus.yml" }
+      - { src: "./AppData/promtail/promtail-config.yml", dest: "/etc/AppData/promtail/promtail-config.yml" }
+      - { src: "./AppData/loki/loki-config.yml", dest: "/etc/AppData/loki/loki-config.yml" }
+
+  tasks:
+    # Step 1: Install Docker and Docker Compose
+    - name: Update apt cache (Debian/Ubuntu only)
+      ansible.builtin.apt:
+        update_cache: yes
+        force_apt_get: yes
+      when: ansible_os_family == "Debian"
+
+    - name: Install Docker (Debian/Ubuntu)
+      ansible.builtin.apt:
+        name: 
+          - docker.io
+          - docker-compose
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Install Docker (RHEL/CentOS)
+      ansible.builtin.yum:
+        name: 
+          - docker
+          - docker-compose
+        state: present
+      when: ansible_os_family == "RedHat"
+
+    - name: Ensure Docker service is running
+      ansible.builtin.service:
+        name: docker
+        state: started
+        enabled: true
+
+    # Step 2: Create necessary directories
+    - name: Ensure directories exist
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+      loop: "{{ directories }}"
+
+    # Step 3: Copy necessary configuration files
+    - name: Copy configuration files to directories
+      ansible.builtin.copy:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        owner: root
+        group: root
+        mode: '0755'
+      loop: "{{ files_to_copy }}"
+
+    # Step 4: Copy the Docker Compose file to the server
+    - name: Copy the Docker Compose file to the server
+      ansible.builtin.copy:
+        src: logging-stack-compose.yml
+        dest: /etc/AppData/docker-compose.yml
+        owner: root
+        group: root
+        mode: '0644'
+
+    # Step 5: Deploy the Docker Compose file
+    - name: Run Docker Compose as root
+      ansible.builtin.command:
+        cmd: docker-compose -f /etc/AppData/docker-compose.yml up -d
+        chdir: /etc/AppData
+      become: true
+
+    # Step 6: Configure UFW to Allow Necessary Ports
+    - name: Ensure UFW is installed
+      ansible.builtin.apt:
+        name: ufw
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Allow port 3100 for Loki (TCP)
+      ansible.builtin.ufw:
+        rule: allow
+        port: 3100
+        proto: tcp
+
+    - name: Allow port 3000 for Grafana (TCP)
+      ansible.builtin.ufw:
+        rule: allow
+        port: 3000
+        proto: tcp
+
+    - name: Allow port 9090 for Prometheus (TCP)
+      ansible.builtin.ufw:
+        rule: allow
+        port: 9090
+        proto: tcp
+
+    - name: Enable UFW
+      ansible.builtin.ufw:
+        state: enabled
+        policy: allow
+  
+    - name: Restart UFW to apply changes
+      ansible.builtin.service:
+        name: ufw
+        state: restarted
+
+    # Step 7: Debug
+    - name: Verify running containers
+      ansible.builtin.command:
+        cmd: docker ps -a
+      register: docker_ps_output
+
+    - name: Debug Docker PS output
+      ansible.builtin.debug:
+        var: docker_ps_output.stdout

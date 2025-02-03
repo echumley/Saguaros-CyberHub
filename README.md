@@ -30,6 +30,45 @@ Here are the main components that will make up the CyberHub:
 
 ![alt text](https://github.com/echumley/CyberHub-Project/blob/15e9d9d7a948f42f647a059a963ff6719399bc96/CyberHub.png)
 
+## Project Roadmap
+
+### Stage 1
+
+#### Goal: Proof of Concept
+[x] Hardware deployment \
+[x] Network deployment \
+[x] Template creation \
+[ ] SIEM/SOAR deployment \
+[ ] Authentiation stack deployment \
+[ ] Primary application deployment (ctfd) \
+[ ] CyberHub internal system \
+[ ] Documentation upload and refinement \
+[ ] Proof of concept demonstration
+
+### Stage 2
+
+#### Goal: Alpha Launch & Private Deployment
+
+[ ] Further development of CyberHub internal system \
+[ ] Secondary application deployment \
+[ ] Vulnerable machine development \
+[ ] Pre-alpha testing & function verification \
+[ ] Alpha testing, feedback, and monitoring strategy development \
+[ ] Documentation refinement \
+[ ] Alpha launch & private deployment to UA Cyber Saguaros
+
+### Stage 3
+
+#### Goal: Beta Launch & Further Testing
+
+[ ] Post-alpha refinement (bug-fixes, stabilization, etc.) \
+[ ] Performance optimization \
+[ ] UI improvement \
+[ ] Security & compliance refinement \
+[ ] Beta testing, feedback, and monitoring strategy development \
+[ ] Documentation refinement \
+[ ] Beta launch & public deployment supported
+
 ## Network Diagram
 
 ![alt text](https://github.com/echumley/The-CyberHub/blob/f8049c57394e33b6164e692e35cd060c55848872/CyberHub%20Network%20v1.drawio.png)
