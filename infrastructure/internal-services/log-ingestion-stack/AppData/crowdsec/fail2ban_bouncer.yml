@@ -1,0 +1,3 @@
+mode: live
+crowdsec_url: "http://127.0.0.1:8080"
+api_key: "YOUR_CROWDSEC_API_KEY"  # Generate using 'cscli bouncers add fail2ban-bouncer'
