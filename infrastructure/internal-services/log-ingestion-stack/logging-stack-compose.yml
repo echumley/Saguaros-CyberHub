@@ -1,0 +1,91 @@
+version: "3"
+
+networks:
+  loki:
+
+volumes:
+  prometheus_data:
+    driver: local
+  loki_data:
+    driver: local
+  grafana_data:
+    driver: local
+  promtail_data:
+    driver: local
+
+services:
+  loki:
+    image: grafana/loki:2.9.2
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/loki-config.yml
+    volumes:
+      - loki_data:/etc/loki
+      - /etc/AppData/loki/loki-config.yml:/etc/loki/loki-config.yml:ro
+    networks:
+      - loki
+    restart: unless-stopped
+
+  promtail:
+    image: grafana/promtail:2.9.2
+    command: -config.file=/etc/promtail/config.yml
+    volumes:
+      - promtail_data:/data
+      - /var/log:/var/log
+      - /etc/AppData/promtail/promtail-config.yml:/etc/promtail/promtail-config.yml:ro
+    networks:
+      - loki
+    restart: unless-stopped
+
+  grafana:
+    environment:
+      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+    entrypoint:
+      - sh
+      - -euc
+      - |
+        mkdir -p /etc/grafana/provisioning/datasources
+        cat <<EOF > /etc/grafana/provisioning/datasources/ds.yaml
+        apiVersion: 1
+        datasources:
+        - name: Loki
+          type: loki
+          access: proxy
+          orgId: 1
+          url: http://localhost:3100/metrics
+          basicAuth: false
+          isDefault: true
+          version: 1
+          editable: false
+        - name: Prometheus
+          type: prometheus
+          access: proxy
+          orgId: 1
+          url: http://prometheus:9090
+          basicAuth: false
+          isDefault: false
+          version: 1
+          editable: true
+        EOF
+        /run.sh
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - loki
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - prometheus_data:/prometheus
+      - /etc/AppData/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - loki
+    restart: unless-stopped

@@ -30,14 +30,14 @@ x.x.x.50-59: Compute servers 5 \
 x.x.x.60-69: Storage servers \
 x.x.x.70-79: Remote server management 1 \
 x.x.x.80-89: Remote server management 2 \
-x.x.x.90-99: Remote server management 3 \
+x.x.x.90-99: Remote server management 3
 
 #### 10.1.20.0/24: Internal services
 
 x.x.x.1: VLAN/subnet gateway \
 x.x.x.2-9: Logging services (Loki, Grafana, Prometheus, etc.) \
 x.x.x.10-19: SIEM & SOAR services (Wazuh, Zeek, TheHive, etc.) \
-x.x.x.20-29: Authentication services (Active Directory) \
+x.x.x.20-29: Authentication services (LDAP, FreeIPA, Keycloack, etc.) \
 x.x.x.30-39: Backup services \
 x.x.x.40-49: Network storage shares \
 x.x.x.50-99: Others

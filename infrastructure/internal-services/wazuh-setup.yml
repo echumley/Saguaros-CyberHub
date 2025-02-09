@@ -1,17 +1,67 @@
 ---
-- name: Deploy Wzauh SEIM & configure host
-  hosts: wazuh.saguaroscyberhub.org
-  vars:
-    ansible_ssh_user: cactus-admin
-    ansible_ssh_private_key_file: /Users/Ethan/.ssh/saguaros-ansible-key
+- name: Install Wazuh Agent
+  hosts: all
+  become: yes
 
   tasks:
-    # Installs updates
-    - name: Install updates on Ubuntu
+    - name: Update Ubuntu
       package:
         upgrade: dist
         update_cache: true
       tags: always
 
-# Install guide for Wazuh over Ansible:
-# https://documentation.wazuh.com/current/deployment-options/deploying-with-ansible/index.html
+    # Firewall configuration
+    - name: Ensure UFW is installed
+      ansible.builtin.package:
+        name: ufw
+        state: present
+
+    - name: Allow HTTP (port 80)
+      ansible.builtin.ufw:
+        rule: allow
+        port: 80
+        proto: tcp
+
+    - name: Allow HTTPS (port 443)
+      ansible.builtin.ufw:
+        rule: allow
+        port: 443
+        proto: tcp
+
+    - name: Allow syslog (port 514)
+      ansible.builtin.ufw:
+        rule: allow
+        port: 514
+        proto: udp
+
+    - name: Ensure UFW is enabled and running
+      ansible.builtin.systemd:
+        name: ufw
+        enabled: yes
+        state: started
+
+    - name: Verify UFW status
+      ansible.builtin.command: ufw status verbose
+      register: ufw_status
+
+    - name: Debug UFW status
+      ansible.builtin.debug:
+        var: ufw_status.stdout_lines
+
+    # Wazuh manager installation
+    - name: Download the Wazuh installation script
+      ansible.builtin.get_url:
+        url: https://packages.wazuh.com/4.9/wazuh-install.sh
+        dest: /tmp/wazuh-install.sh
+        mode: '0755'
+
+    - name: Run the Wazuh installation script
+      ansible.builtin.shell:
+        cmd: bash /tmp/wazuh-install.sh -a -i
+      register: wazuh_install_output
+      failed_when: wazuh_install_output.rc != 0
+      ignore_errors: false
+
+    - name: Display installation logs
+      ansible.builtin.debug:
+        var: wazuh_install_output.stdout_lines
