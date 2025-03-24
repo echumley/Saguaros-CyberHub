@@ -71,7 +71,7 @@ Here are the main components that will make up the CyberHub:
 
 ## Network Diagram
 
-![alt text](https://github.com/echumley/The-CyberHub/blob/f8049c57394e33b6164e692e35cd060c55848872/CyberHub%20Network%20v1.drawio.png)
+![alt text](https://github.com/echumley/The-CyberHub/blob/f8049c57394e33b6164e692e35cd060c55848872/CyberHub%20Network%20v1.1.drawio.png)
 
 ## The Hub
 
