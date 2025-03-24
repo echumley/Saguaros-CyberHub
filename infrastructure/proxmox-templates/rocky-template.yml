@@ -1,30 +1,29 @@
-# -------- WIP / DO NOT USE --------
 ---
-- name: Create ideal Linux Proxmox template
+- name: Create ideal Linux Proxmox template for Rocky Linux 9
   hosts: all
   become: true
   tasks:
 
-    # Installs updates
-    - name: Install updates on Rocky
-      package:
+    # Install updates
+    - name: Install updates on Rocky Linux
+      dnf:
+        name: '*'
+        state: latest
         update_cache: true
-        update_only: true
-      when: ansible_distribution == "Rocky"
       tags: always
 
-    # Installs and starts required software packages
-    - name: Install QEMU Guest Agent, Cloud-Init, and Unattended Upgrades on Rocky
+    # Install required packages
+    - name: Install QEMU Guest Agent, Cloud-Init, DNF Automatic, epel-release, and Fail2Ban
       dnf:
         name:
           - qemu-guest-agent
           - cloud-init
           - dnf-automatic
+          - epel-release
         state: present
         update_cache: yes
-      when: ansible_distribution == "Rocky"
       tags: always
-    
+
     - name: Enable and start QEMU Guest Agent
       systemd:
         name: qemu-guest-agent
@@ -32,132 +31,130 @@
         state: stopped
       tags: always
 
-    # Configures and enables UFW
-    - name: Allow SSH from specific subnet
-      ansible.builtin.ufw:
-        rule: allow
-        proto: tcp
-        from_ip: 10.1.10.0/24
-        port: '22'
-      when: ansible_distribution == "Ubuntu"
-
-    - name: Enable UFW firewall
-      ansible.builtin.ufw:
-        state: enabled
-      when: ansible_distribution == "Ubuntu"
-
-    # Sets current timezone
-    - name: Check the current timezone
-      ansible.builtin.command: timedatectl
-      register: timezone_output
-    
-    - name: Set timezone to America/Phoenix
-      ansible.builtin.command: timedatectl set-timezone America/Phoenix
-      when: "'America/Phoenix' not in timezone_output.stdout"
-
-    # Configures SSH configuration to disable root login and password authentication
-    - name: Configure SSH
-      ansible.builtin.lineinfile:
-        path: /etc/ssh/sshd_config
-        regexp: "{{ item.regexp }}"
-        line: "{{ item.line }}"
-        state: present
-        create: yes
-      loop:
-        - { regexp: '^#?PermitRootLogin', line: 'PermitRootLogin no' }
-        - { regexp: '^#?PasswordAuthentication', line: 'PasswordAuthentication no' }
-        - { regexp: '^#?PubkeyAuthentication', line: 'PubkeyAuthentication yes' }
-        - { regexp: '^#?MaxAuthTries', line: 'MaxAuthTries 9' }
-
-    # Enable automatic updates for security updates on Ubuntu
-    - name: Configure unattended-upgrades settings
-      ansible.builtin.lineinfile:
-        path: /etc/apt/apt.conf.d/20auto-upgrades
-        regexp: '^{{ item.regexp }}'
-        line: '{{ item.line }}'
-        state: present
-      loop:
-        - { regexp: 'APT::Periodic::Update-Package-Lists', line: 'APT::Periodic::Update-Package-Lists "1";' }
-        - { regexp: 'APT::Periodic::Unattended-Upgrade', line: 'APT::Periodic::Unattended-Upgrade "1";' }
-        - { regexp: 'APT::Periodic::Download-Upgradeable-Packages', line: 'APT::Periodic::Download-Upgradeable-Packages "1";' }
-        - { regexp: 'APT::Periodic::AutocleanInterval', line: 'APT::Periodic::AutocleanInterval "7";' }
-
-    # Enable automatic updates for security updates on Rocky
-    - name: Enable and configure dnf-automatic on Rocky
-      systemd:
-        name: dnf-automatic.timer
-        enabled: yes
-        state: started
-      when: ansible_distribution == "Rocky"
-
-    - name: Ensure PasswordAuthentication is set to no
+    # Configure DNF Automatic
+    - name: Configure dnf-automatic for security updates
       lineinfile:
-        path: /etc/ssh/sshd_config.d/50-cloud-init.conf
-        regexp: '^PasswordAuthentication\s+yes'
-        line: 'PasswordAuthentication no'
-        backup: yes
-
-    # Reboots the system to enable the changes
-    - name: Reboot the system
-      reboot:
-        msg: "Reboot initialized by Ansible playbook..."
-        reboot_timeout: 600
+        path: /etc/dnf/automatic.conf
+        regexp: '^upgrade_type'
+        line: 'upgrade_type = security'
+        state: present
       tags: always
 
-    # Delete SSH Host Keys
-    - name: Remove SSH host keys
-      become: true
-      file:
-        path: "/etc/ssh/{{ item }}"
+    - name: Enable dnf-automatic timer
+      systemd:
+        name: dnf-automatic-install.timer
+        enabled: yes
+        state: started
+      tags: always
+
+    # Configure Firewalld to allow SSH only from trusted subnet
+    - name: Create a new Firewalld zone for SSH
+      command: firewall-cmd --permanent --new-zone=ssh-limited
+      ignore_errors: yes
+
+    - name: Allow SSH from VPN subnet
+      command: firewall-cmd --permanent --zone=ssh-limited --add-source=10.1.5.0/24
+
+    - name: Allow SSH from trusted subnet
+      command: firewall-cmd --permanent --zone=ssh-limited --add-source=10.1.30.0/24
+
+    - name: Allow SSH service in new zone
+      command: firewall-cmd --permanent --zone=ssh-limited --add-service=ssh
+
+    - name: Remove SSH service from default zone
+      command: firewall-cmd --permanent --remove-service=ssh
+
+    - name: Reload Firewalld
+      command: firewall-cmd --reload
+
+    # Configure SSH
+    - name: Configure SSH to disable root login
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?PermitRootLogin'
+        line: 'PermitRootLogin no'
+        state: present
+      notify: Reload SSH
+
+    # Configure Fail2Ban
+    - name: Install Fail2Ban
+      dnf:
+        name: fail2ban
+        state: present
+      tags: always
+
+    - name: Start and enable Fail2Ban service
+      systemd:
+        name: fail2ban
+        enabled: yes
+        state: started
+
+    - name: Copy default Fail2Ban configuration
+      copy:
+        src: /etc/fail2ban/fail2ban.conf
+        dest: /etc/fail2ban/fail2ban.local
+        remote_src: yes
+      tags: f2b
+
+    - name: Copy Fail2Ban configuration to VM
+      copy:
+        src: ./configs/fail2ban-jail.conf  # Adjust this path to where your local jail.local file is stored
+        dest: /etc/fail2ban/jail.local
+        owner: root
+        group: root
+        mode: '0644'
+      notify: Restart Fail2Ban
+
+    - name: Ensure Fail2Ban is enabled and started
+      systemd:
+        name: fail2ban
+        enabled: yes
+        state: started
+
+    - name: Reload Fail2Ban configuration
+      command: fail2ban-client reload
+      when: ansible_facts['os_family'] == "RedHat"
+
+    - name: Check Fail2Ban status
+      command: fail2ban-client status sshd
+      register: fail2ban_status
+      changed_when: false
+
+    - debug:
+        msg: "{{ fail2ban_status.stdout_lines }}"
+
+    - name: Flush handlers to reload SSH & Fail2Ban immediately
+      meta: flush_handlers
+
+    # System cleanup
+    - name: Remove SSH authorized_keys file
+      ansible.builtin.file:
+        path: "{{ ansible_user_dir }}/.ssh/authorized_keys"
         state: absent
-      loop: "ssh_host_*"
       tags: cleanup
 
-    - name: Remove contents of ~/.ssh/authorized_keys
-      become: true
-      file:
-        path: "{{ item }}/.ssh/authorized_keys"
-        state: absent
-      with_items:
-        - "/root"
-        - "/home/{{ item }}"
-      loop:
-        - user # Add other usernames as needed
-      tags: skip # cleanup
-
-    # Delete machine-id and recreate symbolic link if needed
-    - name: Truncate /etc/machine-id to zero length
-      file:
-        path: /etc/machine-id
-        state: touch
-        size: 0
+    - name: Clear machine-id
+      copy:
+        content: ""
+        dest: /etc/machine-id
+        owner: root
+        group: root
+        mode: '0644'
       tags: cleanup
 
-    - name: Recreate symbolic link for /etc/machine-id to /var/lib/dbus/machine-id
-      file:
-        src: /etc/machine-id
-        dest: /var/lib/dbus/machine-id
-        state: link
-      tags: cleanup
-
-    # Clean apt database, orphan packages, and cloud-init
-    - name: Clean the apt database
-      command: apt clean
-      tags: cleanup
-
-    - name: Remove orphan packages
-      apt:
-        autoremove: yes
-        purge: yes
-      tags: cleanup
-
-    - name: Clean cloud-init
-      command: cloud-init clean
-      tags: cleanup
-
-    # Shutdown the system
+    # Shutdown system
     - name: Shutdown the system
       command: poweroff
       async: 1
       poll: 0
-      tags: skip # cleanup
+      tags: cleanup
+
+  handlers:
+    - name: Reload SSH
+      systemd:
+        name: sshd
+        state: reloaded
+    - name: Restart Fail2Ban
+      systemd:
+        name: fail2ban
+        state: restarted
