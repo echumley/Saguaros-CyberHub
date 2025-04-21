@@ -2,6 +2,32 @@
 
 This is the folder containing all the infrastructure-related scripts, Ansible playbooks, Docker Compose files, etc.
 
+## Virtualization
+
+![alt text](https://github.com/echumley/Saguaros-CyberHub/blob/main/resources/CyberHub-Virtualization.png?raw=true)
+
+## CyberHub Bare-Metal Cluster
+
+The CyberHub bare-metal cluster will each host a set of nested virtualization environments to better segment the various sub-modules (ie. CyberLabs, The Forge, etc.) along with numerous services to ensure smooth and secure operation of the entire project. This may include non-open-source software as these modules can each be ran on their own (see standalone configurations in the modules' directories (planned, WIP)).
+
+### Internal Services
+
+NOTE: These services may live as VMs on the CyberHub bare-metal cluster or in the nested Docker Swarm cluster
+
+- Active Directory
+- SIEM/SOAR (ideally Splunk Enterprise)
+- Change management software
+- Logging stack
+- Network monitoring
+- OS download/update caching
+- Reverse proxy
+- Keycloak
+- NetBox Labs Enterprise
+
+## CyberLabs Nested Cluster
+
+To be continued...
+
 ## Network Layout
 
 This is a general layout of the network.
@@ -77,28 +103,6 @@ x.x.x.100-254: DHCP
 
 x.x.x.1: VLAN/subnet gateway \
 x.x.x.2-254: DHCP
-
-## CyberHub Bare-Metal Cluster
-
-The CyberHub bare-metal cluster will each host a set of nested virtualization environments to better segment the various sub-modules (ie. CyberLabs, The Forge, etc.) along with numerous services to ensure smooth and secure operation of the entire project. This may include non-open-source software as these modules can each be ran on their own (see standalone configurations in the modules' directories).
-
-### Internal Services
-
-NOTE: These services may live as VMs on the CyberHub bare-metal cluster or in the nested Docker Swarm cluster
-
-    - Active Directory
-    - SIEM/SOAR (ideally Splunk Enterprise)
-    - Change management software
-    - Logging stack (Prometheus, Loki, Grafana, etc.)
-    - Network monitoring
-    - OS download/update caching
-    - Reverse proxy (Traefik)
-    - Keycloak
-    - NetBox Labs Enterprise (network & infrastructure documentation/management)
-
-## CyberLabs Nested Cluster
-
-
 
 ## Proxmox Organization
 
