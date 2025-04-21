@@ -4,7 +4,8 @@ The official repo of the UA Cyber Saguaros CyberHub project.
 
 ## Project Description
 
-The Saguaros CyberHub is the official cyber warfare range and eLearning platform of the Cyber Saguaros, the University of Arizona's largest cybersecurity club. The CyberHub's purpose is split into three main goals that guide our effort throughout this project:
+The Saguaros CyberHub is the official cybersecurity lab, cyber warfare range, and eLearning platform of the Cyber Saguaros, the University of Arizona's largest cybersecurity club. The CyberHub's purpose is split into three main goals that guide our effort throughout this project:
+
 1. Provide club members with the opportunity to supplement their undergraduate and graduate-level coursework with hands-on offensive and defensive security training.
 2. Create a training model & environment for club Capture the Flag (CTF) teams.
 3. Stay free for club members.
@@ -12,19 +13,23 @@ The Saguaros CyberHub is the official cyber warfare range and eLearning platform
 ## Project Ethos
 
 Our goal is to follow this set of ethos set by the team:
+
 1. Use free, open-source software wherever possible.
 2. Keep the project portable for use on any hardware platform by utilizing IAC and scripts.
 3. Keep any deployment of the project free for students.
 
-## Project Components
+## Project Modules
 
-Here are the main components that will make up the CyberHub:
+Here are the main modules that will make up the CyberHub:
+
 1. The Hub - The website/landing page where users authorize and get access to the other sections of the CyberHub.
-2. Saguaros University - Moodle eLearning platform (LMS) with courses and digital badges.
-3. The Crucible - A fully featured, CTF-style cyber warfare range with vulnerable hosts, networking devices, and enterprise environments. 
-4. Library - An organized, properly indexed repository of eBooks, PDF guides, research articles, and cybersecurity resources.
-5. Cyber Wiki - A wiki with vulnerable machine walkthroughs, red/blue team skill playbooks, cheat sheets, and the CyberHub project documentation.
-6. The Archive - A deep archive of malware samples, projects, scrapped data samples, etc.
+2. CyberLabs - Virtualization environment for student and faculty projects.
+3. The Crucible - A fully featured, CTF-style cyber warfare range with vulnerable hosts, networking devices, and enterprise environments.
+4. Saguaros University - Moodle eLearning platform (LMS) with courses and digital badges.
+5. Library - An organized, properly indexed repository of eBooks, PDF guides, research articles, and cybersecurity resources.
+6. Cyber Wiki - A wiki with vulnerable machine walkthroughs, red/blue team skill playbooks, cheat sheets, and the CyberHub project documentation.
+7. The Archive - A deep archive of malware samples, projects, scrapped data samples, etc.
+8. The Forge - An isolated environment where users can deploy, develop, and reverse engineer malicious software for educational purposes.
 
 ## Project Diagram
 
@@ -34,14 +39,13 @@ Here are the main components that will make up the CyberHub:
 
 ### Stage 1
 
-#### Goal: Proof of Concept
+#### Goal: CyberHub & Crucible Proof of Concept
 - [x] Hardware deployment
 - [x] Network deployment
 - [x] Template creation
-- [ ] SIEM/SOAR deployment
 - [ ] Authentiation stack deployment
 - [ ] Primary application deployment (ctfd)
-- [ ] CyberHub internal system
+- [ ] Crucible internal system
 - [ ] Documentation upload and refinement
 - [ ] Proof of concept demonstration
 
@@ -50,6 +54,7 @@ Here are the main components that will make up the CyberHub:
 #### Goal: Alpha Launch & Private Deployment
 
 - [ ] Further development of CyberHub internal system
+- [ ] SIEM/SOAR deployment
 - [ ] Secondary application deployment
 - [ ] Vulnerable machine development
 - [ ] Pre-alpha testing & function verification
@@ -73,7 +78,11 @@ Here are the main components that will make up the CyberHub:
 
 ![alt text](https://github.com/echumley/Saguaros-CyberHub/blob/main/CyberHub%20Traffick%20v1.1.png)
 
-## The Hub
+## CyberLabs
+
+The CyberLabs will be a cloud-like virtualization environment for use by students and faculty in order to ensure computation-heavy projects are supported without the need to deal with the  "red tape" often involved in large projects. This environment will be available to all university students and faculty upon request for a set amount of time and resources necessary to complete their proposed project. These environments will be based on a per-project Debian GNOME desktop environment utilizing KVM/QEMU and Cockpit facilitate virtualization. These desktop environments and their traffic will be closely monitored to ensure users are following the Terms of Service agreed upon following their request approval.
+
+## The Crucible
 
 ### Range Types
 
