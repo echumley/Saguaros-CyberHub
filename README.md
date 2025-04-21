@@ -33,7 +33,7 @@ Here are the main modules that will make up the CyberHub:
 
 ## Project Diagram
 
-![alt text](https://github.com/echumley/CyberHub-Project/blob/15e9d9d7a948f42f647a059a963ff6719399bc96/CyberHub.png)
+![alt text](https://github.com/echumley/Saguaros-CyberHub/blob/main/resources/CyberHub-Architecture.png?raw=true)
 
 ## Project Roadmap
 
@@ -76,7 +76,7 @@ Here are the main modules that will make up the CyberHub:
 
 ## Network Diagram
 
-![alt text](https://github.com/echumley/Saguaros-CyberHub/blob/main/CyberHub%20Traffick%20v1.1.png)
+![alt text](https://github.com/echumley/Saguaros-CyberHub/blob/main/resources/CyberHub%20Traffick%20v1.1.png?raw=true)
 
 ## CyberLabs
 
