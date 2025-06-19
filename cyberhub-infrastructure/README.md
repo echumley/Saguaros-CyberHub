@@ -8,7 +8,7 @@ This is the folder containing all the infrastructure-related scripts, Ansible pl
 
 ## CyberHub Bare-Metal Cluster
 
-The CyberHub bare-metal cluster will each host a set of nested virtualization environments to better segment the various sub-modules (ie. CyberLabs, The Forge, etc.) along with numerous services to ensure smooth and secure operation of the entire project. This may include non-open-source software as these modules can each be ran on their own (see standalone configurations in the modules' directories (planned, WIP)).
+The CyberHub bare-metal cluster will each host a set of nested virtualization environments to better segment the various sub-modules (ie. CyberLabs, The Forge, etc.) along with numerous services to ensure smooth and secure operation of the entire project. This may include non-open-source software as these modules can each be ran on their own (see standalone configurations in the modules' directories (planned - WIP).
 
 ### Internal Services
 
@@ -40,7 +40,7 @@ NOTE: The CyberHub heavily utilizes netested virtualization and network segmenta
 10.1.0.0/24 - Crucible infrastructure \
 10.2.0.0/24 - CyberLabs infrastructure \
 10.3.0.0/24 - Forge infrastructure \
-10.99.99.0/24 - Ceph storage network
+10.99.0.0/24 - Ceph storage network
 
 ### VLANs
 
@@ -49,8 +49,9 @@ NOTE: The CyberHub heavily utilizes netested virtualization and network segmenta
 10.x.30.0/24 on VLAN 30: Trusted Network - Admin VPN access & only subnet with routes to all major services. \
 10.x.40.0/24 on VLAN 40: WiFi Network - WiFi network in the case of local CTF events. \
 10.x.50.0/24 on VLAN 50: DMZ Network - All externally-facing services, reverse proxies, VPN endpoints, etc. \
-10.x.60.0/24 - 10.x.99.0/24 on VLAN 60-99: Lab Networks - Used for testing of new services/infrastructure, admin projects, etc. \
-10.99.99.0/25 on VLAN 999: Ceph Network (if applicable)
+10.x.60.0/24 on VLAN 60: Lab Networks - Used for testing of new services/infrastructure, admin projects, etc. \
+10.0.70.0/24 on VLAN 80: Quarantine Network \
+10.0.99.0/24 on VLAN 99: Ceph Network
 
 ### IP Spacing
 
