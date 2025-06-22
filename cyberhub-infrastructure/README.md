@@ -8,11 +8,11 @@ This is the folder containing all the infrastructure-related scripts, Ansible pl
 
 ## CyberHub Bare-Metal Cluster
 
-The CyberHub bare-metal cluster will each host a set of nested virtualization environments to better segment the various sub-modules (ie. CyberLabs, The Forge, etc.) along with numerous services to ensure smooth and secure operation of the entire project. This may include non-open-source software as these modules can each be ran on their own (see standalone configurations in the modules' directories (planned - WIP).
+The CyberHub bare-metal cluster will each host a set of nested virtualization environments to better segment the various sub-modules (ie. CyberLabs, The Forge, etc.) along with numerous services to ensure smooth and secure operation of the entire project. This may include non-open-source software as these modules can each be ran on their own (see standalone configurations in the modules' directories (planned - WIP)) and it eases adminstrative strain to maintain the physical CyberHub infrastructure.
 
 ### Internal Services
 
-NOTE: These services may live as VMs on the CyberHub bare-metal cluster or in the nested Docker Swarm cluster
+NOTE: These services may live as VMs on the CyberHub bare-metal cluster or in the nested Docker Swarm cluster/K3s cluster.
 
 - Active Directory
 - SIEM/SOAR (ideally Splunk Enterprise)
@@ -23,10 +23,8 @@ NOTE: These services may live as VMs on the CyberHub bare-metal cluster or in th
 - Reverse proxy
 - Keycloak
 - NetBox Labs Enterprise
-
-## CyberLabs Nested Cluster
-
-To be continued...
+- Password manager
+- Secrets manager
 
 ## Network Layout
 
@@ -127,7 +125,13 @@ Keep template organization by numbering based on the VLAN
 
 ## SSH Keys
 
-Utilize separate keys for each service, but during the initial deployment we're utilizing three sets of SSH key pairs:
+Utilize separate keys for each service, but during the initial deployment we're utilizing three sets of SSH key pairs: \
+NOTE: These keys are not publically available, and until we implement a better secret manager, just create these keys or modify the Ansible/Docker/Terraform config files.
+
 - saguaros-admin-key
 - saguaros-ansible-key
 - range-ansible-key
+
+## CyberLabs Nested Cluster
+
+To be continued...

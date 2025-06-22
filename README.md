@@ -138,7 +138,9 @@ These services will be openly available for use by registered players (internall
 
 1. CTF fundamentals
 2. Networking fundamentals
-3. Red team fundamentals
-4. Blue team fundamentals
-5. King of the hill fundamentals
-6. Tool spotlights
+3. IT concept fundamentals
+4. Red team fundamentals
+5. Blue team fundamentals
+6. King of the hill fundamentals
+7. Tool spotlights
+8. Malware development
