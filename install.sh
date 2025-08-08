@@ -1,4 +1,22 @@
 #!/usr/bin/env bash
+
+# ----- CyberHub Installer -----
+# https://github.com/Saguaros-CyberHub
+
+# This script will guide you through the installation process.
+# It will prompt you for configuration options and install the necessary components.
+# It is recommended to run this script on a fresh installation of Proxmox VE 9.
+# Make sure to review the script and understand each step before proceeding.
+
+# Created by Ethan Chumley
+# https://github.com/echumley
+
+# ----- Installation Order: -----
+# 1. Install Proxmox system packages
+# 2. Configure database
+# 3. Set up LDAP
+# 4. Install CyberHub components
+
 set -euo pipefail
 
 # =========================
