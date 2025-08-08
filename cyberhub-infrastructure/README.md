@@ -34,26 +34,25 @@ NOTE: The CyberHub heavily utilizes netested virtualization and network segmenta
 
 ### Subnets
 
-10.0.0.0/24 - CyberHub & additional module infrastructure \
-10.1.0.0/24 - Crucible infrastructure \
-10.2.0.0/24 - CyberLabs infrastructure \
-10.3.0.0/24 - Forge infrastructure \
-10.99.0.0/24 - Ceph storage network
+100.100.0.0/24 - CyberHub & additional module infrastructure \
+100.101.0.0/24 - CyberLabs infrastructure \
+100.102.0.0/24 - Crucible infrastructure \
+100.103.0.0/24 - Forge infrastructure \
 
 ### VLANs
 
-10.x.10.0/24 on VLAN 10: Management Network - Remote server management, admin web UIs, switches, etc. \
-10.x.20.0/24 on VLAN 20: Internal Services Network - Homepage, SEIM, authentication stack, etc. \
-10.x.30.0/24 on VLAN 30: Trusted Network - Admin VPN access & only subnet with routes to all major services. \
-10.x.40.0/24 on VLAN 40: WiFi Network - WiFi network in the case of local CTF events. \
-10.x.50.0/24 on VLAN 50: DMZ Network - All externally-facing services, reverse proxies, VPN endpoints, etc. \
-10.x.60.0/24 on VLAN 60: Lab Networks - Used for testing of new services/infrastructure, admin projects, etc. \
-10.0.70.0/24 on VLAN 80: Quarantine Network \
-10.0.99.0/24 on VLAN 99: Ceph Network
+100.100.10.0/24 on VLAN 10: Management Network - Remote server management, admin web UIs, switches, etc. \
+100.100.20.0/24 on VLAN 20: Internal Services Network - Homepage, SEIM, authentication stack, etc. \
+100.100.30.0/24 on VLAN 30: Trusted Network - Admin VPN access & only subnet with routes to all major services. \
+100.100.40.0/24 on VLAN 40: WiFi Network - WiFi network in the case of local CTF events. \
+100.100.50.0/24 on VLAN 50: DMZ Network - All externally-facing services, reverse proxies, VPN endpoints, etc. \
+100.100.60.0/24 on VLAN 60: Lab Networks - Used for testing of new services/infrastructure, admin projects, etc. \
+100.100.70.0/24 on VLAN 80: Quarantine Network \
+100.100.99.0/24 on VLAN 99: Ceph Network
 
 ### IP Spacing
 
-#### 10.x.10.0/24: Management services
+#### 100.x.10.0/24: Management services
 
 x.x.x.1: VLAN/subnet gateway \
 x.x.x.2-9: Networking devices (Switches, downstream routers, APs, etc.) \
@@ -68,7 +67,7 @@ x.x.x.80-89: Remote server management 2 \
 x.x.x.90-99: Remote server management 3 \
 x.x.x.100-254: DHCP
 
-#### 10.x.20.0/24: Internal services
+#### 100.x.20.0/24: Internal services
 
 x.x.x.1: VLAN/subnet gateway \
 x.x.x.2-9: Logging services (Loki, Grafana, Prometheus, etc.) \
@@ -79,13 +78,13 @@ x.x.x.40-49: Network storage shares \
 x.x.x.50-99: Others \
 x.x.x.100-254: DHCP
 
-#### 10.x.30.0/24: Trusted network & VPN access
+#### 100.x.30.0/24: Trusted network & VPN access
 
 x.x.x.1: VLAN/subnet gateway \
 x.x.x.2-99: Workstations/trusted devices \
 x.x.x.100-254: Administrator VPN endpoints
 
-#### 10.x.40.0/24: WiFi-connected devices
+#### 100.x.40.0/24: WiFi-connected devices
 
 x.x.x.1: VLAN/subnet gateway \
 x.x.x.2-9: WAPs \
@@ -98,7 +97,7 @@ x.x.x.2-9: External access (Traefik, Crowdsec, etc.) \
 x.x.x.10-99: CyberHub services (ctfd, Moodle, etc.) \
 x.x.x.100-254: DHCP
 
-#### 10.x.60-10.x.99.0/24: Lab networks
+#### 100.x.60-10.x.99.0/24: Lab networks
 
 x.x.x.1: VLAN/subnet gateway \
 x.x.x.2-254: DHCP
