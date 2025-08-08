@@ -3,3 +3,12 @@ ansible/
 SaguarosCyberLab-Network.drawio
 proxmox-automated-install/
 cyberlabs/
+
+# Added for install.sh
+/secrets/
+*.key
+.env
+.env.*
+**/.env.runtime
+/tfvars/*.tfvars.json
+/etc/cyberhub/secrets.env
