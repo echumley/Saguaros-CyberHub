@@ -1,57 +1,41 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-<<<<<<< HEAD
 # =========================
-#   Path & State
+#   Root check
+# =========================
+if [[ $EUID -ne 0 ]]; then
+  echo "Please run as root (sudo)."
+  exit 1
+fi
+
+# =========================
+#   Paths & State
 # =========================
 STATE_DIR="/var/lib/cyberhub-installer"
 STATE_FILE="${STATE_DIR}/state.json"
 CFG_FILE="/etc/cyberhub/installer.yaml"
 SECRETS_FILE="/etc/cyberhub/secrets.env"
-=======
-# ===== Config / state paths =====
-STATE_DIR="/var/lib/cyberhub-installer"
-STATE_FILE="${STATE_DIR}/state.json"
-CFG_FILE="/etc/cyberhub/installer.yaml"       # non-secret runtime config
-SECRETS_FILE="/etc/cyberhub/secrets.env"      # gitignored, chmod 600
->>>>>>> caa8ba74f5309a7b013630d08113e18f00f9b8b8
 LOG_FILE="/var/log/cyberhub-installer.log"
 
 mkdir -p "$(dirname "$CFG_FILE")" "$STATE_DIR"
 touch "$LOG_FILE"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
-<<<<<<< HEAD
 PLAN_MODE="false"
 RESUME_MODE="false"
 
 # =========================
-#   Helper functions
+#   Helpers
 # =========================
-=======
-# ===== Helpers =====
->>>>>>> caa8ba74f5309a7b013630d08113e18f00f9b8b8
-require() { command -v "$1" >/dev/null || { echo "Need $1"; exit 1; }; }
+require() { command -v "$1" >/dev/null || { echo "Need '$1' installed. Aborting."; exit 1; }; }
 json_get() { jq -r "$1" "$STATE_FILE" 2>/dev/null || echo ""; }
 json_set() {
   local key="$1" value="$2"
   if [[ ! -s "$STATE_FILE" ]]; then echo '{}' > "$STATE_FILE"; fi
-<<<<<<< HEAD
+  local tmp
   tmp=$(mktemp)
   jq --arg v "$value" "$key = \$v" "$STATE_FILE" > "$tmp" && mv "$tmp" "$STATE_FILE"
-}
-
-# =========================
-#   Safety: tmux session
-# =========================
-ensure_tmux() {
-  if [[ -z "${TMUX:-}" ]]; then
-    echo "[INFO] Not in tmux — starting a persistent tmux session 'cyberhub-install'"
-    require tmux
-    tmux new-session -s cyberhub-install "$0" "$@"
-    exit 0
-  fi
 }
 
 # =========================
@@ -62,10 +46,16 @@ while [[ $# -gt 0 ]]; do
     --resume) RESUME_MODE="true"; shift ;;
     --plan) PLAN_MODE="true"; shift ;;
     --help)
-      echo "Usage: $0 [--plan] [--resume]"
+      cat <<USAGE
+Usage: $0 [--plan] [--resume]
+
+--plan    Dry run: Terraform 'plan', Ansible '--check', skip docker 'up'
+--resume  Skip first-run wizard; continue from state.json
+USAGE
       exit 0
       ;;
-    *) shift ;;
+    *)
+      echo "Unknown arg: $1"; exit 1 ;;
   esac
 done
 
@@ -74,71 +64,42 @@ done
 # =========================
 first_run_wizard() {
   require whiptail
-=======
-  tmp=$(mktemp); jq --arg v "$value" "$key = \$v" "$STATE_FILE" > "$tmp" && mv "$tmp" "$STATE_FILE"
-}
+  require jq
+  require yq
 
-first_run_wizard() {
-  require whiptail || { echo "Install 'whiptail' (newt)"; exit 1; }
->>>>>>> caa8ba74f5309a7b013630d08113e18f00f9b8b8
-  TITLE="CyberHub Installer"
+  local TITLE="CyberHub Installer"
+
+  local ENV DOMAIN PVE_HOSTNAME MGMT_IFACE MGMT_CIDR MGMT_GW BACKEND MODULE_CHOICES MODULES
 
   ENV=$(whiptail --title "$TITLE" --nocancel --menu "Select environment" 15 60 4 \
       "dev" "Development" \
       "stage" "Staging" \
       "prod" "Production" 3>&1 1>&2 2>&3)
 
-<<<<<<< HEAD
-  DOMAIN=$(whiptail --title "$TITLE" --nocancel --inputbox "Base domain (e.g. cyberhub.local)" 10 60 "" 3>&1 1>&2 2>&3)
-
-  PVE_HOSTNAME=$(whiptail --title "$TITLE" --nocancel --inputbox "Proxmox hostname (FQDN)" 10 60 "pve.${DOMAIN}" 3>&1 1>&2 2>&3)
-  MGMT_IFACE=$(whiptail --title "$TITLE" --nocancel --inputbox "Proxmox mgmt interface" 10 60 "eno1" 3>&1 1>&2 2>&3)
-  MGMT_CIDR=$(whiptail --title "$TITLE" --nocancel --inputbox "Proxmox mgmt CIDR" 10 60 "" 3>&1 1>&2 2>&3)
-  MGMT_GW=$(whiptail --title "$TITLE" --nocancel --inputbox "Proxmox gateway" 10 60 "" 3>&1 1>&2 2>&3)
-
-  BACKEND=$(whiptail --title "$TITLE" --nocancel --menu "Secrets backend" 15 60 3 \
-      "vault" "HashiCorp Vault" \
-      "sops"  "Mozilla SOPS + age" \
-      "env"   "Local .env" 3>&1 1>&2 2>&3)
-
-  MODULE_CHOICES=$(whiptail --title "$TITLE" --separate-output --checklist "Select modules" 20 70 10 \
-      "hub" "Core web portal" ON \
-      "cybercore" "CyberCore orchestration" ON \
-      "cyberlabs" "Virtualization env" OFF \
-      "crucible" "CTF range" OFF \
-      "university" "Moodle LMS" OFF \
-      "library" "Resource library" OFF \
-=======
   DOMAIN=$(whiptail --title "$TITLE" --nocancel --inputbox "Base domain (e.g. cyberhub.local or example.edu)" 10 60 "" 3>&1 1>&2 2>&3)
 
-  PVE_HOSTNAME=$(whiptail --title "$TITLE" --nocancel --inputbox "Proxmox hostname (FQDN recommended)" 10 60 "pve.${DOMAIN}" 3>&1 1>&2 2>&3)
+  PVE_HOSTNAME=$(whiptail --title "$TITLE" --nocancel --inputbox "Proxmox hostname (FQDN)" 10 60 "pve.${DOMAIN}" 3>&1 1>&2 2>&3)
   MGMT_IFACE=$(whiptail --title "$TITLE" --nocancel --inputbox "Proxmox mgmt interface (e.g. eno1)" 10 60 "eno1" 3>&1 1>&2 2>&3)
   MGMT_CIDR=$(whiptail --title "$TITLE" --nocancel --inputbox "Proxmox mgmt CIDR (e.g. 10.0.0.10/24)" 10 60 "" 3>&1 1>&2 2>&3)
   MGMT_GW=$(whiptail --title "$TITLE" --nocancel --inputbox "Proxmox default gateway (e.g. 10.0.0.1)" 10 60 "" 3>&1 1>&2 2>&3)
 
   BACKEND=$(whiptail --title "$TITLE" --nocancel --menu "Secrets backend" 15 60 3 \
       "vault" "HashiCorp Vault (OIDC, dynamic creds)" \
-      "sops"  "Mozilla SOPS + age in git" \
-      "env"   "Local .env (not recommended)" 3>&1 1>&2 2>&3)
+      "sops"  "Mozilla SOPS + age (encrypted in git)" \
+      "env"   "Local .env file (not recommended)" 3>&1 1>&2 2>&3)
 
-  # module selection
   MODULE_CHOICES=$(whiptail --title "$TITLE" --separate-output --checklist "Select modules to install" 20 70 10 \
       "hub" "Core web portal (required)" ON \
-      "cybercore" "CyberCore (orchestration brain, required)" ON \
+      "cybercore" "CyberCore orchestration (required)" ON \
       "cyberlabs" "Virtualization environment" OFF \
       "crucible" "CTF cyber range" OFF \
       "university" "Moodle LMS" OFF \
       "library" "Indexed resources" OFF \
->>>>>>> caa8ba74f5309a7b013630d08113e18f00f9b8b8
       "wiki" "Cyber Wiki" OFF \
       "archive" "Malware/data archive" OFF \
       "forge" "Malware dev sandbox" OFF 3>&1 1>&2 2>&3) || true
   MODULES=$(echo "$MODULE_CHOICES" | tr '\n' ',' | sed 's/,$//')
 
-<<<<<<< HEAD
-=======
-  # write config file (non-secret)
->>>>>>> caa8ba74f5309a7b013630d08113e18f00f9b8b8
   cat > "$CFG_FILE" <<YAML
 env: "$ENV"
 domain: "$DOMAIN"
@@ -152,96 +113,63 @@ modules: [$(echo "$MODULES" | sed 's/,/, /g' | sed 's/\([^,][^,]*\)/"\1"/g')]
 YAML
   chmod 644 "$CFG_FILE"
 
-<<<<<<< HEAD
   if [[ ! -f "$SECRETS_FILE" ]]; then
     touch "$SECRETS_FILE"; chmod 600 "$SECRETS_FILE"
     cat >> "$SECRETS_FILE" <<ENV
-# Backend secrets config
+# Backend secrets config (filled by you or automation)
+# For Vault:
 # VAULT_ADDR=
 # VAULT_NAMESPACE=
 # VAULT_TOKEN=
-=======
-  # secrets stub (gitignored, chmod 600)
-  if [[ ! -f "$SECRETS_FILE" ]]; then
-    touch "$SECRETS_FILE"; chmod 600 "$SECRETS_FILE"
-    cat >> "$SECRETS_FILE" <<ENV
-# Filled by backend later
-# VAULT_ADDR=
-# VAULT_NAMESPACE=
-# VAULT_TOKEN=             # if not using OIDC login flow
->>>>>>> caa8ba74f5309a7b013630d08113e18f00f9b8b8
+# For SOPS:
 # SOPS_AGE_KEY_FILE=
 ENV
   fi
 
   json_set '.first_run_done' 'true'
+  echo "[Wizard] Config written to $CFG_FILE"
 }
 
-<<<<<<< HEAD
 # =========================
 #   Proxmox install
 # =========================
 install_proxmox_on_debian() {
-=======
-install_proxmox_on_debian() {
-  # Idempotent check
->>>>>>> caa8ba74f5309a7b013630d08113e18f00f9b8b8
   if dpkg -s pve-manager >/dev/null 2>&1; then
     echo "[Proxmox] Already installed."
     json_set '.pve.installed' 'true'
     return
   fi
 
-<<<<<<< HEAD
   . /etc/os-release
   if [[ "${VERSION_CODENAME:-}" != "bookworm" ]]; then
-    echo "Debian 12 required."
+    echo "Debian 12 (bookworm) required. Detected: ${VERSION_CODENAME:-unknown}"
     exit 1
   fi
 
-  require curl; require gpg; require yq
-  HOSTNAME=$(yq -r '.pve.hostname' "$CFG_FILE")
-  if ! grep -q "$HOSTNAME" /etc/hosts; then
-    IP=$(yq -r '.pve.mgmt_cidr' "$CFG_FILE" | cut -d'/' -f1)
-=======
-  # Basic sanity
-  . /etc/os-release
-  if [[ "${VERSION_CODENAME:-}" != "bookworm" ]]; then
-    echo "Debian 12 (bookworm) required."
-    exit 1
-  fi
+  require curl
+  require gpg
+  require yq
 
-  # hosts entry
-  yq -r '.pve.hostname' "$CFG_FILE" >/dev/null # ensures yq exists later
-  require curl; require gpg; require yq
+  local HOSTNAME IP IFACE CIDR GW
   HOSTNAME=$(yq -r '.pve.hostname' "$CFG_FILE")
+  IP=$(yq -r '.pve.mgmt_cidr' "$CFG_FILE" | cut -d'/' -f1)
+
   if ! grep -q "$HOSTNAME" /etc/hosts; then
-    IP="${MGMT_CIDR%/*}"
->>>>>>> caa8ba74f5309a7b013630d08113e18f00f9b8b8
     echo "$IP $HOSTNAME ${HOSTNAME%%.*}" >> /etc/hosts
   fi
   hostnamectl set-hostname "$HOSTNAME"
 
-<<<<<<< HEAD
-=======
-  echo "[Proxmox] Adding repositories..."
->>>>>>> caa8ba74f5309a7b013630d08113e18f00f9b8b8
+  echo "[Proxmox] Adding APT repository..."
   echo "deb http://download.proxmox.com/debian/pve bookworm pve-no-subscription" \
     > /etc/apt/sources.list.d/pve-install-repo.list
   curl -fsSL https://enterprise.proxmox.com/debian/proxmox-release-bookworm.gpg \
     -o /etc/apt/trusted.gpg.d/proxmox-release-bookworm.gpg
 
+  echo "[Proxmox] Installing packages..."
   apt-get update
-<<<<<<< HEAD
   apt-get install -y pve-kernel-6.8 proxmox-ve postfix open-iscsi
 
-  # network
-=======
-  # Install the Proxmox kernel + stack
-  apt-get install -y pve-kernel-6.8 proxmox-ve postfix open-iscsi
-
-  # Optional: configure network (basic mgmt iface)
->>>>>>> caa8ba74f5309a7b013630d08113e18f00f9b8b8
+  echo "[Proxmox] Configuring management network..."
   IFACE=$(yq -r '.pve.mgmt_iface' "$CFG_FILE")
   CIDR=$(yq -r '.pve.mgmt_cidr' "$CFG_FILE")
   GW=$(yq -r '.pve.mgmt_gw' "$CFG_FILE")
@@ -256,73 +184,39 @@ iface ${IFACE} inet static
 IFC
 
   systemctl enable --now iscsid || true
-<<<<<<< HEAD
+
   json_set '.pve.installed' 'true'
   json_set '.pve.reboot_required' 'true'
+  echo "[Proxmox] Base install complete. A reboot is required to switch to the Proxmox kernel."
 }
 
 # =========================
 #   Post-Proxmox tweaks
 # =========================
 proxmox_postinstall_tweaks() {
-  sed -i 's|^deb https://enterprise.proxmox.com/#|# &|' /etc/apt/sources.list.d/pve-enterprise.list || true
-=======
+  # Remove enterprise repo line if present to avoid nag (safe if absent)
+  sed -i 's|^deb https://enterprise.proxmox.com/.*|# &|' /etc/apt/sources.list.d/pve-enterprise.list 2>/dev/null || true
 
-  json_set '.pve.installed' 'true'
-  json_set '.pve.reboot_required' 'true'
-  echo "[Proxmox] Install complete. Reboot required."
-}
-
-post_reboot_resume_unit() {
-  # Create a oneshot systemd service to resume after reboot
-  cat >/etc/systemd/system/cyberhub-installer-resume.service <<UNIT
-[Unit]
-Description=Resume CyberHub Installer after Proxmox reboot
-After=network-online.target
-Wants=network-online.target
-
-[Service]
-Type=oneshot
-ExecStart=/usr/local/sbin/cyberhub-installer-resume.sh
-
-[Install]
-WantedBy=multi-user.target
-UNIT
-
-  cat >/usr/local/sbin/cyberhub-installer-resume.sh <<'RESUME'
-#!/usr/bin/env bash
-set -euo pipefail
-# Continue installer; assumes install.sh is in /root/cyberhub or similar
-INSTALLER="${INSTALLER:-/root/cyberhub/install.sh}"
-ENV=${ENV:-}
-MODULES=${MODULES:-}
-bash "$INSTALLER" --resume
-RESUME
-  chmod +x /usr/local/sbin/cyberhub-installer-resume.sh
-  systemctl enable cyberhub-installer-resume.service
-}
-
-proxmox_postinstall_tweaks() {
-  # Remove subscription nag, enable nested virt, load modules, etc.
-  # (safe idempotent ops)
-  sed -i 's/https:\/\/enterprise.proxmox.com\/debian\/pve/# &/' /etc/apt/sources.list.d/pve-enterprise.list || true
->>>>>>> caa8ba74f5309a7b013630d08113e18f00f9b8b8
+  # Enable nested virtualization
   echo "options kvm_intel nested=1" > /etc/modprobe.d/kvm-intel.conf || true
   echo "options kvm_amd nested=1"   > /etc/modprobe.d/kvm-amd.conf || true
   update-initramfs -u || true
-  modprobe kvm_intel || modprobe kvm_amd || true
+  modprobe kvm_intel 2>/dev/null || modprobe kvm_amd 2>/dev/null || true
+
+  echo "[Proxmox] Post-install tweaks completed."
 }
 
-<<<<<<< HEAD
 # =========================
 #   Secrets backend loader
 # =========================
 fetch_secrets() {
+  local BACKEND
   BACKEND=$(yq -r '.secrets_backend' "$CFG_FILE")
   case "$BACKEND" in
     vault) require vault; require jq; source "$SECRETS_FILE" ;;
-    sops) require sops; require age; source "$SECRETS_FILE" ;;
-    env) source "$SECRETS_FILE" ;;
+    sops)  require sops; require age; source "$SECRETS_FILE" ;;
+    env)   source "$SECRETS_FILE" ;;
+    *)     echo "Unknown secrets backend: $BACKEND"; exit 1 ;;
   esac
 }
 
@@ -331,18 +225,26 @@ fetch_secrets() {
 # =========================
 terraform_run() {
   local dir="$1"
+  require terraform
+  require yq
   pushd "$dir" >/dev/null
   terraform init -upgrade
+  local env domain
+  env=$(yq -r '.env' "$CFG_FILE")
+  domain=$(yq -r '.domain' "$CFG_FILE")
+
   if [[ "$PLAN_MODE" == "true" ]]; then
-    terraform plan -var "env=$(yq -r '.env' "$CFG_FILE")" -var "domain=$(yq -r '.domain' "$CFG_FILE")"
+    terraform plan -var "env=$env" -var "domain=$domain"
   else
-    terraform apply -auto-approve -var "env=$(yq -r '.env' "$CFG_FILE")" -var "domain=$(yq -r '.domain' "$CFG_FILE")"
+    terraform apply -auto-approve -var "env=$env" -var "domain=$domain"
   fi
   popd >/dev/null
 }
 
 ansible_run() {
   local inventory="$1" playbook="$2"
+  require ansible-playbook
+  require yq
   pushd ansible >/dev/null
   if [[ "$PLAN_MODE" == "true" ]]; then
     ansible-playbook -i "$inventory" "$playbook" -e "@${CFG_FILE}" --check
@@ -354,17 +256,20 @@ ansible_run() {
 
 compose_run() {
   local dir="$1"
+  require docker
   if [[ "$PLAN_MODE" == "true" ]]; then
-    echo "[PLAN] Would run docker compose in $dir"
+    echo "[PLAN] Would run: docker compose --env-file .env.runtime up -d (in $dir)"
     return
   fi
   pushd "$dir" >/dev/null
+  # Ensure an env file exists so compose doesn't error; feel free to populate earlier.
+  [[ -f .env.runtime ]] || touch .env.runtime && chmod 600 .env.runtime
   docker compose --env-file .env.runtime up -d
   popd >/dev/null
 }
 
 # =========================
-#   Install CyberCore + Hub
+#   CyberCore + Hub
 # =========================
 install_cybercore_and_hub() {
   terraform_run terraform/core
@@ -374,151 +279,98 @@ install_cybercore_and_hub() {
 }
 
 # =========================
-#   Install selected modules
+#   Modules
 # =========================
-=======
-fetch_secrets() {
-  BACKEND=$(yq -r '.secrets_backend' "$CFG_FILE")
-  case "$BACKEND" in
-    vault)
-      require vault; require jq
-      # Example: export a token or do OIDC login once
-      source "$SECRETS_FILE" || true
-      export VAULT_ADDR VAULT_NAMESPACE VAULT_TOKEN
-      ;;
-    sops)
-      require sops; require age
-      source "$SECRETS_FILE" || true
-      export SOPS_AGE_KEY_FILE
-      ;;
-    env)
-      source "$SECRETS_FILE" || true
-      ;;
-  esac
-}
-
-install_cybercore_and_hub() {
-  # Terraform: create PVE resources, networks, storage; Ansible: configure host; docker: deploy hub/core
-  pushd terraform/core >/dev/null
-  terraform init -upgrade
-  terraform apply -auto-approve \
-    -var "env=$(yq -r '.env' "$CFG_FILE")" \
-    -var "domain=$(yq -r '.domain' "$CFG_FILE")"
-  popd >/dev/null
-
-  pushd ansible >/dev/null
-  ansible-playbook -i inventories/$(yq -r '.env' "$CFG_FILE") site_core.yml \
-    -e "@${CFG_FILE}"
-  popd >/dev/null
-
-  pushd compose/hub >/dev/null
-  # Generate ephemeral env file for compose
-  RUNTIME_ENV="$(pwd)/.env.runtime"
-  : > "$RUNTIME_ENV"
-  chmod 600 "$RUNTIME_ENV"
-  # Example vars (fill via vault/sops lookups in a real impl)
-  echo "CYBERHUB_DOMAIN=$(yq -r '.domain' "$CFG_FILE")" >> "$RUNTIME_ENV"
-  docker compose --env-file "$RUNTIME_ENV" up -d
-  popd >/dev/null
-
-  json_set '.core.installed' 'true'
-}
-
->>>>>>> caa8ba74f5309a7b013630d08113e18f00f9b8b8
 install_modules() {
-  IFS=',' read -ra MODS <<< "$(yq -r '.modules | join(",")' "$CFG_FILE")"
+  local list
+  list="$(yq -r '.modules | join(",")' "$CFG_FILE")"
+  IFS=',' read -ra MODS <<< "$list"
   for m in "${MODS[@]}"; do
     case "$m" in
+      hub|cybercore) ;; # already installed in core step
+
       cyberlabs)
-<<<<<<< HEAD
         terraform_run terraform/cyberlabs
         ansible_run "inventories/$(yq -r '.env' "$CFG_FILE")" cyberlabs.yml
         compose_run compose/cyberlabs
         ;;
+
       crucible)
         terraform_run terraform/crucible
         ansible_run "inventories/$(yq -r '.env' "$CFG_FILE")" crucible.yml
         compose_run compose/crucible
         ;;
-      # add other modules similarly...
-=======
-        pushd terraform/cyberlabs >/dev/null
-        terraform init -upgrade
-        terraform apply -auto-approve -var-file="../../tfvars/$(yq -r '.env' "$CFG_FILE").tfvars.json"
-        popd >/dev/null
-        ansible-playbook -i ansible/inventories/$(yq -r '.env' "$CFG_FILE") ansible/cyberlabs.yml \
-          -e "@${CFG_FILE}"
-        pushd compose/cyberlabs >/dev/null
-        docker compose --env-file ../../secrets/.env.runtime up -d || true
-        popd >/dev/null
+
+      university)
+        terraform_run terraform/university
+        ansible_run "inventories/$(yq -r '.env' "$CFG_FILE")" university.yml
+        compose_run compose/university
         ;;
-      crucible)
-        # repeat pattern per module…
+
+      library)
+        terraform_run terraform/library
+        ansible_run "inventories/$(yq -r '.env' "$CFG_FILE")" library.yml
+        compose_run compose/library
         ;;
-      university|library|wiki|archive|forge)
+
+      wiki)
+        terraform_run terraform/wiki
+        ansible_run "inventories/$(yq -r '.env' "$CFG_FILE")" wiki.yml
+        compose_run compose/wiki
         ;;
-      hub|cybercore)
-        ;; # already done in core
->>>>>>> caa8ba74f5309a7b013630d08113e18f00f9b8b8
+
+      archive)
+        terraform_run terraform/archive
+        ansible_run "inventories/$(yq -r '.env' "$CFG_FILE")" archive.yml
+        compose_run compose/archive
+        ;;
+
+      forge)
+        terraform_run terraform/forge
+        ansible_run "inventories/$(yq -r '.env' "$CFG_FILE")" forge.yml
+        compose_run compose/forge
+        ;;
+
+      "" ) ;; # ignore empty
+      * )
+        echo "[WARN] Unknown module '$m' — skipping."
+        ;;
     esac
   done
   json_set '.modules.installed' 'true'
 }
 
-<<<<<<< HEAD
 # =========================
 #   Main
 # =========================
-ensure_tmux "$@"
-
 if [[ "$RESUME_MODE" != "true" && "$(json_get '.first_run_done')" != "true" ]]; then
-=======
-usage() {
-  cat <<USAGE
-Usage: $0 [--resume]
-- Runs a first-run wizard, installs Proxmox on Debian, reboots, resumes, then installs CyberCore/Hub and selected modules.
-USAGE
-}
-
-# ===== Main =====
-if [[ "${1:-}" == "--help" ]]; then usage; exit 0; fi
-
-if [[ "${1:-}" != "--resume" && "$(json_get '.first_run_done')" != "true" ]]; then
->>>>>>> caa8ba74f5309a7b013630d08113e18f00f9b8b8
-  require jq; require yq
   first_run_wizard
 fi
 
+# Phase 1: Proxmox base install
 if [[ "$(json_get '.pve.installed')" != "true" ]]; then
   install_proxmox_on_debian
-<<<<<<< HEAD
-  echo "[INFO] Reboot required after Proxmox install. Please reboot and re-run with --resume"
+  echo
+  echo "==> Reboot now to load the Proxmox kernel, then run:"
+  echo "    $0 --resume${PLAN_MODE:+ --plan}"
+  echo
   exit 0
 fi
 
-=======
-  post_reboot_resume_unit
-  echo "Rebooting now to switch to Proxmox kernel..."
-  sleep 2
-  systemctl reboot
-  exit 0
-fi
-
-# We are post-reboot at this point
->>>>>>> caa8ba74f5309a7b013630d08113e18f00f9b8b8
+# Phase 1b: Post-reboot Proxmox tweaks
 proxmox_postinstall_tweaks
+
+# Phase 2: Secrets (Vault/SOPS/env)
 fetch_secrets
 
+# Phase 3: CyberCore + Hub
 if [[ "$(json_get '.core.installed')" != "true" ]]; then
   install_cybercore_and_hub
 fi
 
+# Phase 4: Selected modules
 if [[ "$(json_get '.modules.installed')" != "true" ]]; then
   install_modules
 fi
 
-<<<<<<< HEAD
 echo "✅ CyberHub install complete (plan mode: $PLAN_MODE)"
-=======
-echo "✅ All done. CyberHub installed."
->>>>>>> caa8ba74f5309a7b013630d08113e18f00f9b8b8
