@@ -8,6 +8,10 @@ cyberlabs/
 __pycache__/
 db_data/
 cookies/
+**/secrets/*
+role_id
+secret_id
+tempCodeRunnerFile.sh
 
 # Added for install.sh
 /secrets/

@@ -1,0 +1,3 @@
+{{ with secret "secret/data/postgres" -}}
+{{ .Data.data.POSTGRES_PASSWORD }}
+{{- end }}

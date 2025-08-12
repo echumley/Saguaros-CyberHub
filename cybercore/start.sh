@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# CyberCore User Profiles Start Script
-# Starts the PostgreSQL database and DirSync service
+# CyberCore Start Script
+# Starts Traefik, PostgreSQL database, N8N, Adminer, and LDAP sync services
 
 set -e  # Exit on any error
 
@@ -14,12 +14,13 @@ NC='\033[0m' # No Color
 
 # Default values
 DRY_RUN=false
-COMPOSE_FILE="user-postgresql-compose.yml"
+COMPOSE_FILE="cybercore-compose.yml"
 SERVICE_NAME="ldap-sync"
 DETACH=true
 FORCE_RECREATE=false
 USE_UNIVERSAL=false
 LDAP_TYPE="activedirectory"
+TEMP_DIR="/tmp/cybercore-$$"
 
 # Function to print colored output
 print_info() {
@@ -41,7 +42,7 @@ print_error() {
 # Function to show help
 show_help() {
     cat << EOF
-CyberCore User Profiles Start Script
+CyberCore Start Script
 
 Usage: $0 [OPTIONS]
 
@@ -55,7 +56,7 @@ OPTIONS:
     --help, -h          Show this help message
 
 EXAMPLES:
-    $0                          Start normally with legacy AD connector
+        ./start.sh                          Start normally with AD-optimized connector
     $0 --dry-run                Start with mock LDAP data (no real LDAP server needed)
     $0 --universal              Use universal connector with Active Directory
     $0 --openldap               Use universal connector with OpenLDAP
@@ -65,13 +66,15 @@ EXAMPLES:
                                 Start in dry-run mode, foreground, recreating containers
 
 SERVICES:
+    - Traefik reverse proxy (localhost:8080)
     - PostgreSQL database (cybercore-postgres)
-    - Adminer web interface (localhost:8080)
+    - N8N automation platform (n8n.localhost:8080)
+    - Adminer web interface (adminer.localhost:8080)
     - LDAP Sync service (user synchronization)
 
 LDAP CONNECTORS:
-    Legacy Connector:     Optimized for Active Directory only (DirSync)
-    Universal Connector:  Supports AD, OpenLDAP, 389DS with auto-detection
+    AD-Optimized Connector:   High-performance Active Directory sync
+    Universal Connector:      Supports AD, OpenLDAP, 389DS with auto-detection
 
 ENVIRONMENT:
     The script will create the required Docker network if it doesn't exist.
@@ -98,8 +101,8 @@ check_requirements() {
         exit 1
     fi
     
-    if [ ! -f "dirsync.py" ]; then
-        print_error "DirSync script not found: dirsync.py"
+    if [ ! -f "automation/scripts/universal-ldap-sync.py" ]; then
+        print_error "Universal LDAP sync script not found: automation/scripts/universal-ldap-sync.py"
         exit 1
     fi
     
@@ -123,8 +126,11 @@ create_network() {
 create_dry_run_env() {
     print_info "Setting up dry-run mode environment variables..." >&2
     
-    # Create or update .env file with dry-run settings
-    cat > .env << 'EOF'
+    # Create temporary directory for runtime files
+    mkdir -p "$TEMP_DIR"
+    
+    # Create temporary .env file with dry-run settings
+    cat > "$TEMP_DIR/.env" << 'EOF'
 # Dry-run mode settings
 DRY_RUN=true
 INTERVAL=10
@@ -133,19 +139,13 @@ INCLUDE_DELETES=true
 EOF
 
     # Add connector-specific settings
-    if [ "$USE_UNIVERSAL" = true ]; then
-        cat >> .env << EOF
+    cat >> "$TEMP_DIR/.env" << EOF
 SYNC_PAGE_SIZE=2000
 LDAP_TYPE=${LDAP_TYPE}
 EOF
-    else
-        cat >> .env << 'EOF'
-DIRSYNC_PAGE_SIZE=2000
-EOF
-    fi
 
     # Add database settings (same for both modes)
-    cat >> .env << 'EOF'
+    cat >> "$TEMP_DIR/.env" << 'EOF'
 
 # Database settings (same for both modes)
 DB_HOST=cybercore-postgres
@@ -155,7 +155,7 @@ DB_USER=cyberhub
 DB_PASS=cyberpass
 EOF
 
-    print_success "Dry-run environment configured" >&2
+    print_success "Dry-run environment configured in $TEMP_DIR" >&2
 }
 
 # Function to start services
@@ -163,6 +163,8 @@ start_services() {
     local compose_file=$1
     local detach_flag=""
     local recreate_flag=""
+    local profile_flag=""
+    local env_file_flag=""
     
     if [ "$DETACH" = true ]; then
         detach_flag="-d"
@@ -172,16 +174,36 @@ start_services() {
         recreate_flag="--force-recreate"
     fi
     
+    # Use temporary .env file if it exists
+    if [ -f "$TEMP_DIR/.env" ]; then
+        env_file_flag="--env-file $TEMP_DIR/.env"
+        print_info "Using temporary environment file: $TEMP_DIR/.env"
+    elif [ -f ".env" ]; then
+        print_info "Using existing .env file"
+    else
+        print_info "Using compose file defaults (no .env file)"
+    fi
+    
+    # Determine which profile to use
+    if [ "$USE_UNIVERSAL" = false ]; then
+        # Use ad-optimized profile for the legacy AD connector
+        profile_flag="--profile ad-optimized"
+    else
+        # Use universal profile for multi-platform LDAP connector
+        profile_flag="--profile universal"
+    fi
+
     print_info "Starting services..."
     print_info "Compose file: $compose_file"
     print_info "Detach mode: $DETACH"
     print_info "Force recreate: $FORCE_RECREATE"
+    print_info "Profile: ${profile_flag:-none}"
     
     # Use docker compose if available, fallback to docker-compose
     if docker compose version &> /dev/null; then
-        docker compose -f "$compose_file" up $detach_flag $recreate_flag
+        docker compose -f "$compose_file" $env_file_flag $profile_flag up $detach_flag $recreate_flag
     else
-        docker-compose -f "$compose_file" up $detach_flag $recreate_flag
+        docker-compose -f "$compose_file" $env_file_flag $profile_flag up $detach_flag $recreate_flag
     fi
 }
 
@@ -191,52 +213,50 @@ show_service_info() {
     echo
     print_info "Service Information:"
     echo "  • PostgreSQL Database:"
-    echo "    - Host: localhost:5432"
+    echo "    - Host: localhost:5433"
     echo "    - Database: cyberhub_core"
     echo "    - Username: cyberhub"
     echo "    - Password: cyberpass"
     echo
     echo "  • Adminer Web Interface:"
-    echo "    - URL: http://localhost:8080"
+    echo "    - URL: http://adminer.localhost:8080"
     echo "    - Use the database credentials above to connect"
     echo
-    echo "  • DirSync Service:"
+    echo "  • N8N Automation Platform:"
+    echo "    - URL: http://n8n.localhost:8080"
+    echo "    - Webhook URL: http://n8n.localhost:8080/"
+    echo
+    echo "  • Traefik Reverse Proxy:"
+    echo "    - Dashboard: http://localhost:8080 (if API enabled)"
+    echo "    - HTTP Entry Point: localhost:8080"
+    echo
+    echo "  • LDAP Sync Service:"
     if [ "$DRY_RUN" = true ]; then
         echo "    - Mode: DRY-RUN (mock LDAP data)"
         echo "    - Interval: 10 seconds"
         echo "    - Status: Generating test user data"
-        if [ "$USE_UNIVERSAL" = true ]; then
-            echo "    - Connector: Universal (${LDAP_TYPE})"
-        else
-            echo "    - Connector: Legacy (Active Directory)"
-        fi
+        echo "    - Connector: Universal LDAP Sync (${LDAP_TYPE})"
     else
-        if [ "$USE_UNIVERSAL" = true ]; then
-            echo "    - Mode: PRODUCTION (Universal LDAP Connector)"
-            echo "    - LDAP Type: ${LDAP_TYPE}"
-            echo "    - Interval: 30 seconds"
-            echo "    - Status: Synchronizing with LDAP server"
-        else
-            echo "    - Mode: PRODUCTION (Legacy AD Connector)"
-            echo "    - LDAP Server: ldaps://ad-1.saguaroscyberhub.org"
-            echo "    - Interval: 30 seconds"
-            echo "    - Status: Synchronizing with Active Directory"
-        fi
+        echo "    - Mode: PRODUCTION (Universal LDAP Connector)"
+        echo "    - LDAP Type: ${LDAP_TYPE}"
+        echo "    - Interval: 30 seconds"
+        echo "    - Status: Synchronizing with LDAP server"
     fi
     echo
     print_info "Useful Commands:"
     echo "  • View logs: docker logs -f cybercore-postgres"
-    echo "  • View sync logs: docker logs -f ldap-sync (or container name)"
-    echo "  • Stop services: docker-compose -f $COMPOSE_FILE down"
+    echo "  • View n8n logs: docker logs -f [n8n-container-name]"
+    echo "  • View sync logs: docker logs -f cybercore-ldap-sync (or cybercore-universal-ldap-sync)"
+    echo "  • Stop services: docker compose -f $COMPOSE_FILE down"
     echo "  • Connect to database: docker exec -it cybercore-postgres psql -U cyberhub -d cyberhub_core"
     echo
 }
 
 # Function to cleanup
 cleanup() {
-    if [ "$DRY_RUN" = true ] && [ -f ".env" ]; then
-        print_info "Cleaning up temporary environment file..."
-        rm -f .env
+    if [ -d "$TEMP_DIR" ]; then
+        print_info "Cleaning up temporary directory: $TEMP_DIR"
+        rm -rf "$TEMP_DIR"
     fi
 }
 
@@ -260,7 +280,6 @@ while [[ $# -gt 0 ]]; do
             ;;
         --universal)
             USE_UNIVERSAL=true
-            COMPOSE_FILE="universal-compose.yml"
             shift
             ;;
         --ldap-type)
@@ -270,7 +289,6 @@ while [[ $# -gt 0 ]]; do
         --openldap)
             USE_UNIVERSAL=true
             LDAP_TYPE="openldap"
-            COMPOSE_FILE="universal-compose.yml"
             shift
             ;;
         --help|-h)
@@ -285,9 +303,9 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-# Main execution
+    # Main execution
 main() {
-    print_info "Starting CyberCore User Profiles..."
+    print_info "Starting CyberCore services..."
     
     if [ "$DRY_RUN" = true ]; then
         print_warning "Running in DRY-RUN mode (mock LDAP connection)"
@@ -298,7 +316,7 @@ main() {
     if [ "$USE_UNIVERSAL" = true ]; then
         print_info "Using Universal LDAP Connector (${LDAP_TYPE})"
     else
-        print_info "Using Legacy AD Connector (Active Directory only)"
+        print_info "Using AD-Optimized Connector (Active Directory)"
     fi
     
     # Check requirements
@@ -311,18 +329,15 @@ main() {
     if [ "$DRY_RUN" = true ]; then
         create_dry_run_env
     else
-        # Remove any existing .env file to use defaults
-        rm -f .env
-        
-        # Create production .env if using universal connector
+        # Create production .env in temp dir if using universal connector
         if [ "$USE_UNIVERSAL" = true ]; then
-            cat > .env << EOF
+            mkdir -p "$TEMP_DIR"
+            cat > "$TEMP_DIR/.env" << EOF
 LDAP_TYPE=${LDAP_TYPE}
 EOF
+            print_info "Created temporary production .env with LDAP_TYPE=${LDAP_TYPE}"
         fi
-    fi
-    
-    # Start services with the appropriate compose file
+    fi    # Start services with the appropriate compose file
     start_services "$COMPOSE_FILE"
     
     # Show information if running detached

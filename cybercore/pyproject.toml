@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cybercore"
+version = "0.1.0"
+description = "CyberCore CLI"
+readme = "README.md"
+requires-python = ">=3.9"
+
+# creates the console command
+[project.scripts]
+cybercore = "cybercore.main:main"
+
+[tool.setuptools]
+package-dir = {"" = "."}
+
+[tool.setuptools.packages.find]
+where = ["."]

@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# CyberCore User Profiles Stop Script
-# Stops all services and optionally cleans up volumes
+# CyberCore Stop Script
+# Stops all CyberCore services and optionally cleans up volumes
 
 set -e  # Exit on any error
 
@@ -13,7 +13,7 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # Default values
-COMPOSE_FILE="user-postgresql-compose.yml"
+COMPOSE_FILE="cybercore-compose.yml"
 REMOVE_VOLUMES=false
 REMOVE_NETWORK=false
 
@@ -37,7 +37,7 @@ print_error() {
 # Function to show help
 show_help() {
     cat << EOF
-CyberCore User Profiles Stop Script
+CyberCore Stop Script
 
 Usage: $0 [OPTIONS]
 
@@ -58,24 +58,36 @@ EOF
 
 # Function to stop services
 stop_services() {
-    print_info "Stopping CyberCore User Profiles services..."
+    print_info "Stopping CyberCore services..."
     
-    # Stop using the main compose file
-    if [ -f "user-postgresql-compose.yml" ]; then
-        print_info "Stopping services from user-postgresql-compose.yml"
+    # Stop using the cybercore compose file
+    if [ -f "cybercore-compose.yml" ]; then
+        print_info "Stopping services from cybercore-compose.yml"
         
         # Use docker compose if available, fallback to docker-compose
         if docker compose version &> /dev/null; then
-            docker compose -f "user-postgresql-compose.yml" down 2>/dev/null || true
+            # Stop both ad-optimized and universal profiles
+            docker compose -f "cybercore-compose.yml" --profile ad-optimized down 2>/dev/null || true
+            docker compose -f "cybercore-compose.yml" --profile universal down 2>/dev/null || true
+            docker compose -f "cybercore-compose.yml" down 2>/dev/null || true
         else
-            docker-compose -f "user-postgresql-compose.yml" down 2>/dev/null || true
+            # Stop both ad-optimized and universal profiles
+            docker-compose -f "cybercore-compose.yml" --profile ad-optimized down 2>/dev/null || true
+            docker-compose -f "cybercore-compose.yml" --profile universal down 2>/dev/null || true
+            docker-compose -f "cybercore-compose.yml" down 2>/dev/null || true
         fi
     fi
     
     # Also try to stop containers by name in case compose files are missing
     print_info "Ensuring individual containers are stopped..."
     docker stop cybercore-postgres 2>/dev/null || true
-    docker stop ldap-sync 2>/dev/null || true
+    docker stop cybercore-ldap-sync 2>/dev/null || true
+    docker stop cybercore-universal-ldap-sync 2>/dev/null || true
+    docker stop cybercore-adminer 2>/dev/null || true
+    
+    # Stop additional CyberCore services
+    docker stop cybercore-traefik-1 2>/dev/null || true
+    docker stop cybercore-n8n-1 2>/dev/null || true
     
     print_success "Services stopped"
 }
@@ -85,11 +97,18 @@ remove_volumes() {
     if [ "$REMOVE_VOLUMES" = true ]; then
         print_warning "Removing Docker volumes (this will delete all data)..."
         
-        # Remove named volumes
-        docker volume rm db_data 2>/dev/null || true
-        docker volume rm dirsync_cookies 2>/dev/null || true
+        # Remove named volumes that might be created
         docker volume rm cybercore_db_data 2>/dev/null || true
-        docker volume rm cybercore_dirsync_cookies 2>/dev/null || true
+        docker volume rm cybercore_n8n-data 2>/dev/null || true
+        docker volume rm cybercore_n8n-files 2>/dev/null || true
+        docker volume rm cybercore_ad_cookies 2>/dev/null || true
+        docker volume rm cybercore_sync_state 2>/dev/null || true
+        
+        # Remove legacy volume names if they exist
+        docker volume rm db_data 2>/dev/null || true
+        docker volume rm n8n-data 2>/dev/null || true
+        docker volume rm ad_cookies 2>/dev/null || true
+        docker volume rm sync_state 2>/dev/null || true
         
         # Remove any anonymous volumes
         print_info "Removing unused volumes..."
@@ -117,13 +136,7 @@ remove_network() {
 cleanup_temp_files() {
     print_info "Cleaning up temporary files..."
     
-    # Remove .env file if it exists
-    if [ -f ".env" ]; then
-        rm -f ".env"
-        print_info "Removed temporary .env file"
-    fi
-    
-    # Clean up any other temporary files
+    # Clean up any temporary files (but preserve .env)
     rm -f .env.tmp 2>/dev/null || true
 }
 
@@ -152,7 +165,7 @@ done
 
 # Main execution
 main() {
-    print_info "Stopping CyberCore User Profiles..."
+    print_info "Stopping CyberCore services..."
     
     if [ "$REMOVE_VOLUMES" = true ]; then
         print_warning "Volume removal is enabled - all data will be deleted!"
@@ -176,7 +189,7 @@ main() {
     # Clean up temporary files
     cleanup_temp_files
     
-    print_success "CyberCore User Profiles stopped successfully!"
+    print_success "CyberCore services stopped successfully!"
     
     if [ "$REMOVE_VOLUMES" = false ]; then
         print_info "Database data has been preserved"

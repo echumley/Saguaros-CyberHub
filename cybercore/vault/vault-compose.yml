@@ -5,6 +5,7 @@ services:
     cap_add:
       - IPC_LOCK
     environment:
+      VAULT_ADDR: "http://vault:8200"   # not 0.0.0.0, not https
       VAULT_LOCAL_CONFIG: |
         {
           "storage": { "file": { "path": "/vault/file" } },
@@ -26,3 +27,9 @@ services:
     volumes:
       - ./data:/vault/file
     restart: unless-stopped
+    networks:
+      - cybercore-net
+
+networks:
+  cybercore-net:
+    external: true

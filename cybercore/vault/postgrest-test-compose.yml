@@ -1,0 +1,40 @@
+networks:
+  cybercore-net:
+    external: true
+
+services:
+  vault-agent:
+    image: hashicorp/vault:latest
+    container_name: pgtest-vault-agent
+    environment:
+      VAULT_ADDR: "http://vault:8200"   # <-- service name of your running Vault
+      # VAULT_CACERT: "/agent/ca.crt"
+    cap_add: [ "IPC_LOCK" ]
+    user: "0:0"
+    volumes:
+      - ./agent:/agent:ro
+      - ./secrets:/secrets              # RW for rendered file
+    command: agent -log-level=info -config=/agent/config.hcl
+    networks: [ cybercore-net ]
+    restart: unless-stopped
+
+  postgres16-test:
+    image: postgres:16
+    container_name: postgres16-test
+    depends_on: [ vault-agent ]
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+      - ./secrets:/secrets:ro
+    ports:
+      - "5433:5432"
+    entrypoint: >
+      /bin/sh -lc '
+      while [ ! -s /secrets/postgres.env ]; do
+        echo "Waiting for Vault Agent to render /secrets/postgres.env...";
+        sleep 1;
+      done;
+      set -a; . /secrets/postgres.env; set +a;
+      exec docker-entrypoint.sh postgres
+      '
+    networks: [ cybercore-net ]
+    restart: unless-stopped
