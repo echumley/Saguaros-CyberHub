@@ -4,7 +4,7 @@ The official repo of the UA Cyber Saguaros CyberHub project.
 
 ## Project Description
 
-The Saguaros CyberHub is the official cybersecurity lab, cyber warfare range, and eLearning platform of the Cyber Saguaros, the University of Arizona's largest cybersecurity club. The CyberHub's purpose is split a few main goals that guide our effort throughout this project:
+The Saguaros CyberHub is the official cybersecurity lab, cyber warfare range, and eLearning platform of the Cyber Saguaros, the University of Arizona's largest cybersecurity club. The CyberHub's purpose is split into a few main goals that guide our effort throughout this project:
 
 1. Provide club members with the opportunity to supplement their undergraduate and graduate-level coursework with hands-on offensive and defensive security training.
 2. Create a training model & environment for club Capture the Flag (CTF) teams.
@@ -35,6 +35,7 @@ Here are the main modules that will make up the CyberHub:
 7. **Saguaros Wiki** - A wiki with vulnerable machine walkthroughs, red/blue team skill playbooks, cheat sheets, and the CyberHub project documentation.
 8. **The Archive** - A deep archive of malware samples, projects, scrapped data samples, etc.
 9. **The Forge** - An isolated environment where users can deploy, develop, and reverse engineer malicious software for educational purposes.
+10. **CyberProbe** - An automated fuzzing and vulnerability discovery environment that generates malformed inputs to test application security and identify potential weaknesses.
 
 ## Live Preview
 
