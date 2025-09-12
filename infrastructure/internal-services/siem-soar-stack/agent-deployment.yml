@@ -1,6 +1,6 @@
 ---
-- name: Deploy Apache Guacamole & configure host
-  hosts: apacheguac.saguaroscyberhub.org
+- name: Deploy SIEM/SOAR agents & configure host
+  hosts: siem-soar-agents
   vars:
     ansible_ssh_user: cactus-admin
     ansible_ssh_private_key_file: /home/cactus-admin/.ssh/saguaros-ansible-key

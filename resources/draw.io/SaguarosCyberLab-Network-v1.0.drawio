@@ -1,0 +1,143 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.1.2 Chrome/138.0.7204.243 Electron/37.4.0 Safari/537.36" version="28.1.2">
+  <diagram name="Page-1" id="tPVVoRPvJsqDk1ESfkIT">
+    <mxGraphModel dx="1018" dy="1848" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="f-pL53njrG-QnQtVTXg3-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.495;entryY=0.019;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="bwIRD5_Hkph5ZWRoPyPu-20" target="f-pL53njrG-QnQtVTXg3-2" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="H7D7_hBK-JgvpFHoKBMk-31" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.75;entryY=0;entryDx=0;entryDy=0;" parent="1" source="bwIRD5_Hkph5ZWRoPyPu-16" target="bwIRD5_Hkph5ZWRoPyPu-17" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="471" y="200" />
+              <mxPoint x="355" y="200" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="H7D7_hBK-JgvpFHoKBMk-32" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" parent="1" source="bwIRD5_Hkph5ZWRoPyPu-16" target="xgsmxFv2LQyWWzPdJLTw-4" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="471" y="200" />
+              <mxPoint x="585" y="200" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="bwIRD5_Hkph5ZWRoPyPu-16" value="&lt;div&gt;AZCWR Network&lt;/div&gt;" style="image;aspect=fixed;perimeter=ellipsePerimeter;html=1;align=center;shadow=0;dashed=0;spacingTop=3;image=img/lib/active_directory/internet_cloud.svg;" parent="1" vertex="1">
+          <mxGeometry x="429.98" y="80" width="81.75" height="51.5" as="geometry" />
+        </mxCell>
+        <mxCell id="xgsmxFv2LQyWWzPdJLTw-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="bwIRD5_Hkph5ZWRoPyPu-17" target="bwIRD5_Hkph5ZWRoPyPu-18" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="bwIRD5_Hkph5ZWRoPyPu-17" value="&lt;div&gt;Router 1: saguaros-opnsense-1&lt;/div&gt;&lt;div&gt;saguaros-opnsense-1.saguaroscyberhub.com&lt;/div&gt;&lt;div&gt;&lt;div&gt;Gateway IP: 10.3.250.254/24&lt;/div&gt;&lt;div&gt;LAN IP: 100.100.0.1/24&lt;/div&gt;&lt;/div&gt;" style="image;html=1;image=img/lib/clip_art/networking/Router_Icon_128x128.png" parent="1" vertex="1">
+          <mxGeometry x="310" y="230" width="60" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="xgsmxFv2LQyWWzPdJLTw-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="bwIRD5_Hkph5ZWRoPyPu-18" target="bwIRD5_Hkph5ZWRoPyPu-20" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="bwIRD5_Hkph5ZWRoPyPu-18" value="&lt;div&gt;JUNIPER QFX5100-24Q-AFI 32x40G QSFP+&lt;/div&gt;&lt;div&gt;saguaros-coresw-0.saguaroscyberhub.org&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212)); color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;100.100.10.5/24&lt;/span&gt;&lt;/div&gt;" style="verticalLabelPosition=bottom;sketch=0;aspect=fixed;html=1;verticalAlign=top;strokeColor=none;align=center;outlineConnect=0;shape=mxgraph.citrix.switch;labelBackgroundColor=default;" parent="1" vertex="1">
+          <mxGeometry x="432.07" y="360" width="77.6" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="bwIRD5_Hkph5ZWRoPyPu-20" value="Juniper EX4300-48T 48x1G 4x10G&lt;div&gt;&lt;div&gt;saguaros-mgmtsw-0.saguaroscyberhub.org&lt;/div&gt;&lt;div&gt;100.100.10.7&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212)); color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;/24&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;" style="verticalLabelPosition=bottom;sketch=0;aspect=fixed;html=1;verticalAlign=top;strokeColor=none;align=center;outlineConnect=0;shape=mxgraph.citrix.switch;labelBackgroundColor=default;" parent="1" vertex="1">
+          <mxGeometry x="432.07000000000005" y="470" width="77.6" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="xgsmxFv2LQyWWzPdJLTw-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="xgsmxFv2LQyWWzPdJLTw-4" target="bwIRD5_Hkph5ZWRoPyPu-18" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="xgsmxFv2LQyWWzPdJLTw-4" value="&lt;div&gt;Router 2: saguaros-opnsense-2&lt;/div&gt;&lt;div&gt;&lt;div&gt;saguaros-opnsense-2.saguaroscyberhub.com&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;Gateway IP: 10.3.250.253&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212)); color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;/24&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;LAN IP: 100.100.0.2/24&lt;/div&gt;&lt;/div&gt;" style="image;html=1;image=img/lib/clip_art/networking/Router_Icon_128x128.png" parent="1" vertex="1">
+          <mxGeometry x="570" y="230" width="60" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="f-pL53njrG-QnQtVTXg3-2" value="CyberHub-Node-0 ~ 100.100.10.10&lt;span style=&quot;text-align: center;&quot;&gt;/24&lt;/span&gt;" style="shape=mxgraph.rack.hp.hp_proliant_dl385p_g8;html=1;labelPosition=right;align=left;spacingLeft=15;dashed=0;shadow=0;fillColor=#ffffff;labelBackgroundColor=default;" parent="1" vertex="1">
+          <mxGeometry x="390.38" y="580" width="161" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="f-pL53njrG-QnQtVTXg3-3" value="CyberHub-Node-1 ~ 100.100.10.11&lt;span style=&quot;text-align: center;&quot;&gt;/24&lt;/span&gt;" style="shape=mxgraph.rack.hp.hp_proliant_dl385p_g8;html=1;labelPosition=right;align=left;spacingLeft=15;dashed=0;shadow=0;fillColor=#ffffff;labelBackgroundColor=default;" parent="1" vertex="1">
+          <mxGeometry x="390.38" y="610" width="161" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="f-pL53njrG-QnQtVTXg3-4" value="CyberHub-Node-2 ~ 100.100.10.12&lt;span style=&quot;text-align: center;&quot;&gt;/24&lt;/span&gt;" style="shape=mxgraph.rack.hp.hp_proliant_dl385p_g8;html=1;labelPosition=right;align=left;spacingLeft=15;dashed=0;shadow=0;fillColor=#ffffff;labelBackgroundColor=default;" parent="1" vertex="1">
+          <mxGeometry x="390.38" y="640" width="161" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="f-pL53njrG-QnQtVTXg3-5" value="CyberHub-Node-3&amp;nbsp;~ 100.100.10.13&lt;span style=&quot;text-align: center; background-color: rgb(18, 18, 18);&quot;&gt;/24&lt;/span&gt;" style="shape=mxgraph.rack.hp.hp_proliant_dl385p_g8;html=1;labelPosition=right;align=left;spacingLeft=15;dashed=0;shadow=0;fillColor=#ffffff;" parent="1" vertex="1">
+          <mxGeometry x="390.38" y="670" width="161" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="f-pL53njrG-QnQtVTXg3-6" value="CyberHub-Node-4&amp;nbsp;~ 100.100.10.14&lt;span style=&quot;text-align: center; background-color: rgb(18, 18, 18);&quot;&gt;/24&lt;/span&gt;" style="shape=mxgraph.rack.hp.hp_proliant_dl385p_g8;html=1;labelPosition=right;align=left;spacingLeft=15;dashed=0;shadow=0;fillColor=#ffffff;" parent="1" vertex="1">
+          <mxGeometry x="390.38" y="700" width="161" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="f-pL53njrG-QnQtVTXg3-7" value="CyberHub-Node-5&amp;nbsp;~ 100.100.10.15&lt;span style=&quot;text-align: center; background-color: rgb(18, 18, 18);&quot;&gt;/24&lt;/span&gt;" style="shape=mxgraph.rack.hp.hp_proliant_dl385p_g8;html=1;labelPosition=right;align=left;spacingLeft=15;dashed=0;shadow=0;fillColor=#ffffff;" parent="1" vertex="1">
+          <mxGeometry x="390.38" y="730" width="161" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="f-pL53njrG-QnQtVTXg3-8" value="CyberHub-Node-6&amp;nbsp;~ 100.100.10.16&lt;span style=&quot;text-align: center; background-color: rgb(18, 18, 18);&quot;&gt;/24&lt;/span&gt;" style="shape=mxgraph.rack.hp.hp_proliant_dl385p_g8;html=1;labelPosition=right;align=left;spacingLeft=15;dashed=0;shadow=0;fillColor=#ffffff;" parent="1" vertex="1">
+          <mxGeometry x="390.37" y="760" width="161" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="f-pL53njrG-QnQtVTXg3-9" value="CyberHub-Node-7&amp;nbsp;~ 100.100.10.17&lt;span style=&quot;text-align: center; background-color: rgb(18, 18, 18);&quot;&gt;/24&lt;/span&gt;" style="shape=mxgraph.rack.hp.hp_proliant_dl385p_g8;html=1;labelPosition=right;align=left;spacingLeft=15;dashed=0;shadow=0;fillColor=#ffffff;" parent="1" vertex="1">
+          <mxGeometry x="390.37" y="790" width="161" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="f-pL53njrG-QnQtVTXg3-10" value="CyberHub-Node-8&amp;nbsp;~ 100.100.10.18&lt;span style=&quot;text-align: center; background-color: rgb(18, 18, 18);&quot;&gt;/24&lt;/span&gt;" style="shape=mxgraph.rack.hp.hp_proliant_dl385p_g8;html=1;labelPosition=right;align=left;spacingLeft=15;dashed=0;shadow=0;fillColor=#ffffff;" parent="1" vertex="1">
+          <mxGeometry x="390.37" y="820" width="161" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="f-pL53njrG-QnQtVTXg3-11" value="CyberHub-Node-9&amp;nbsp;~ 100.100.10.19&lt;span style=&quot;text-align: center; background-color: rgb(18, 18, 18);&quot;&gt;/24&lt;/span&gt;" style="shape=mxgraph.rack.hp.hp_proliant_dl385p_g8;html=1;labelPosition=right;align=left;spacingLeft=15;dashed=0;shadow=0;fillColor=#ffffff;" parent="1" vertex="1">
+          <mxGeometry x="390.37" y="850" width="161" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="f-pL53njrG-QnQtVTXg3-12" value="CyberHub-Node-10&amp;nbsp;~ 100.100.10.20&lt;span style=&quot;text-align: center; background-color: rgb(18, 18, 18);&quot;&gt;/24&lt;/span&gt;" style="shape=mxgraph.rack.hp.hp_proliant_dl385p_g8;html=1;labelPosition=right;align=left;spacingLeft=15;dashed=0;shadow=0;fillColor=#ffffff;" parent="1" vertex="1">
+          <mxGeometry x="390.37" y="880" width="161" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="f-pL53njrG-QnQtVTXg3-13" value="CyberHub-Node-11&amp;nbsp;~ 100.100.10.21&lt;span style=&quot;text-align: center; background-color: rgb(18, 18, 18);&quot;&gt;/24&lt;/span&gt;" style="shape=mxgraph.rack.hp.hp_proliant_dl385p_g8;html=1;labelPosition=right;align=left;spacingLeft=15;dashed=0;shadow=0;fillColor=#ffffff;" parent="1" vertex="1">
+          <mxGeometry x="390.37" y="910" width="161" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="f-pL53njrG-QnQtVTXg3-15" value="CyberHub-Storage-0&amp;nbsp;&amp;nbsp;~ 100.100.10.60&lt;span style=&quot;text-align: center; background-color: rgb(18, 18, 18);&quot;&gt;/24&lt;/span&gt;" style="shape=mxgraph.rack.hp.hp_proliant_dl385p_g8;html=1;labelPosition=right;align=left;spacingLeft=15;dashed=0;shadow=0;fillColor=#ffffff;" parent="1" vertex="1">
+          <mxGeometry x="390.37" y="1000" width="161" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="f-pL53njrG-QnQtVTXg3-16" value="CyberHub-Storage-1&amp;nbsp;&amp;nbsp;~ 100.100.10.61&lt;span style=&quot;text-align: center; background-color: rgb(18, 18, 18);&quot;&gt;/24&lt;/span&gt;" style="shape=mxgraph.rack.hp.hp_proliant_dl385p_g8;html=1;labelPosition=right;align=left;spacingLeft=15;dashed=0;shadow=0;fillColor=#ffffff;" parent="1" vertex="1">
+          <mxGeometry x="390.37" y="1030" width="161" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="f-pL53njrG-QnQtVTXg3-18" value="CyberHub-Storage-2&amp;nbsp;&amp;nbsp;~ 100.100.10.62&lt;span style=&quot;text-align: center; background-color: rgb(18, 18, 18);&quot;&gt;/24&lt;/span&gt;" style="shape=mxgraph.rack.hp.hp_proliant_dl385p_g8;html=1;labelPosition=right;align=left;spacingLeft=15;dashed=0;shadow=0;fillColor=#ffffff;" parent="1" vertex="1">
+          <mxGeometry x="390.36" y="1090" width="161" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="f-pL53njrG-QnQtVTXg3-19" value="&lt;div&gt;Off-site backup&lt;/div&gt;&lt;div&gt;saguaros-offsite-0.chumbucket.dev&lt;/div&gt;" style="shape=mxgraph.rack.hp.hp_proliant_dl385p_g8;html=1;labelPosition=right;align=left;spacingLeft=15;dashed=0;shadow=0;fillColor=#ffffff;" parent="1" vertex="1">
+          <mxGeometry x="650" y="-70.00000000000006" width="161" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="H7D7_hBK-JgvpFHoKBMk-7" value="REDACTED-GPU-0&amp;nbsp;&amp;nbsp;~ 100.150.10.10&lt;span style=&quot;text-align: center; background-color: rgb(18, 18, 18);&quot;&gt;/24&lt;/span&gt;" style="shape=mxgraph.rack.hp.hp_proliant_dl385p_g8;html=1;labelPosition=right;align=left;spacingLeft=15;dashed=0;shadow=0;fillColor=#ffffff;" parent="1" vertex="1">
+          <mxGeometry x="390.37" y="940" width="161" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="H7D7_hBK-JgvpFHoKBMk-8" value="REDACTED-Storage-0&amp;nbsp;&amp;nbsp;~ 100.150.10.11&lt;span style=&quot;text-align: center; background-color: rgb(18, 18, 18);&quot;&gt;/24&lt;/span&gt;" style="shape=mxgraph.rack.hp.hp_proliant_dl385p_g8;html=1;labelPosition=right;align=left;spacingLeft=15;dashed=0;shadow=0;fillColor=#ffffff;" parent="1" vertex="1">
+          <mxGeometry x="390.39" y="970" width="161" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="H7D7_hBK-JgvpFHoKBMk-33" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#FF8000;endArrow=classic;endFill=1;dashed=1;dashPattern=8 8;exitX=0;exitY=0.75;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" parent="1" source="H7D7_hBK-JgvpFHoKBMk-11" target="bwIRD5_Hkph5ZWRoPyPu-17" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="325" y="200" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="H7D7_hBK-JgvpFHoKBMk-34" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#FF8000;dashPattern=8 8;endArrow=classic;endFill=1;dashed=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;" parent="1" source="H7D7_hBK-JgvpFHoKBMk-11" target="xgsmxFv2LQyWWzPdJLTw-4" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="600" y="80" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="H7D7_hBK-JgvpFHoKBMk-35" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="H7D7_hBK-JgvpFHoKBMk-11" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="650.0000000000002" y="-55.00000000000023" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="H7D7_hBK-JgvpFHoKBMk-11" value="&lt;div&gt;Router 0: ChumBucket-UDM-Pro&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212)); color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;ChumBucket-UDM-Pro.chumbucket.dev&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212)); color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;WAN IP:&amp;nbsp;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;text-align: left; background-color: rgb(27, 29, 30);&quot;&gt;REDACTED&lt;/span&gt;&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212)); color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;/23&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;LAN IP: 10.0.0.1/24&lt;/div&gt;&lt;div&gt;VPN LAN IP: 10.0.254.1/24&lt;/div&gt;&lt;/div&gt;" style="image;html=1;image=img/lib/clip_art/networking/Router_Icon_128x128.png" parent="1" vertex="1">
+          <mxGeometry x="440.89" y="-80" width="60" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="H7D7_hBK-JgvpFHoKBMk-36" value="" style="group" parent="1" vertex="1" connectable="0">
+          <mxGeometry x="100" y="76.6" width="219.89999999999998" height="54.900000000000006" as="geometry" />
+        </mxCell>
+        <mxCell id="bwIRD5_Hkph5ZWRoPyPu-15" value="" style="points=[];aspect=fixed;html=1;align=center;shadow=0;dashed=0;fillColor=#FF6A00;strokeColor=none;shape=mxgraph.alibaba_cloud.vpn_gateway;labelBackgroundColor=none;" parent="H7D7_hBK-JgvpFHoKBMk-36" vertex="1">
+          <mxGeometry x="164.99999999999994" width="54.900000000000006" height="54.900000000000006" as="geometry" />
+        </mxCell>
+        <mxCell id="H7D7_hBK-JgvpFHoKBMk-30" value="&lt;div&gt;WireGuard VPN GW 1&lt;/div&gt;&lt;div&gt;VPN LAN IP: 10.0.254.2/24&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="H7D7_hBK-JgvpFHoKBMk-36" vertex="1">
+          <mxGeometry y="10.850000000000009" width="170" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="H7D7_hBK-JgvpFHoKBMk-37" value="" style="group" parent="1" vertex="1" connectable="0">
+          <mxGeometry x="620" y="80" width="217.45000000000005" height="54.89999999999999" as="geometry" />
+        </mxCell>
+        <mxCell id="H7D7_hBK-JgvpFHoKBMk-24" value="" style="points=[];aspect=fixed;html=1;align=center;shadow=0;dashed=0;fillColor=#FF6A00;strokeColor=none;shape=mxgraph.alibaba_cloud.vpn_gateway;labelBackgroundColor=none;" parent="H7D7_hBK-JgvpFHoKBMk-37" vertex="1">
+          <mxGeometry width="54.900000000000006" height="54.900000000000006" as="geometry" />
+        </mxCell>
+        <mxCell id="H7D7_hBK-JgvpFHoKBMk-29" value="&lt;div&gt;WireGuard VPN GW 2&lt;/div&gt;&lt;div&gt;VPN LAN IP: 10.0.254.3/24&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="H7D7_hBK-JgvpFHoKBMk-37" vertex="1">
+          <mxGeometry x="47.450000000000045" y="9.150000000000006" width="170" height="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

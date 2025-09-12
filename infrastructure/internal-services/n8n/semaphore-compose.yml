@@ -1,0 +1,11 @@
+services:
+    semaphore:
+        ports:
+            - 3000:3000
+        image: semaphoreui/semaphore:v2.16.18
+        environment:
+            SEMAPHORE_DB_DIALECT: sqlite
+            SEMAPHORE_ADMIN: admin
+            SEMAPHORE_ADMIN_PASSWORD: changeme
+            SEMAPHORE_ADMIN_NAME: Admin
+            SEMAPHORE_ADMIN_EMAIL: admin@localhost

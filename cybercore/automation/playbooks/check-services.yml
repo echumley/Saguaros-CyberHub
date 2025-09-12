@@ -1,0 +1,21 @@
+---
+- name: Check CyberCore Services Status
+  hosts: local
+  gather_facts: no
+  tasks:
+    - name: Check Docker service
+      command: docker --version
+      register: docker_version
+      changed_when: false
+
+    - name: List running containers
+      command: docker ps --format "table {{.Names}}\t{{.Status}}"
+      register: containers
+      changed_when: false
+
+    - name: Display results
+      debug:
+        msg:
+          - "Docker Version: {{ docker_version.stdout }}"
+          - "Running Containers:"
+          - "{{ containers.stdout }}"

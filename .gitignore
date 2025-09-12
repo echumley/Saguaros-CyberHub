@@ -1,6 +1,5 @@
 .DS_Store
 ansible/
-SaguarosCyberLab-Network.drawio
 proxmox-automated-install/
 cyberlabs/
 **/data/*
@@ -10,8 +9,9 @@ db_data/
 cookies/
 **/secrets/*
 role_id
-secret_id
+secret_ide
 tempCodeRunnerFile.sh
+.claude/
 
 # Added for install.sh
 /secrets/

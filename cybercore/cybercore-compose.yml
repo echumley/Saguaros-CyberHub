@@ -16,6 +16,70 @@ services:
     networks:
       - cybercore-net
 
+  # Keycloak Database
+  keycloak-db:
+    image: postgres:16
+    container_name: cybercore-keycloak-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${KC_DB_NAME:-keycloak}
+      POSTGRES_USER: ${KC_DB_USER:-keycloak}
+      POSTGRES_PASSWORD: ${KC_DB_PASS:-keycloak}
+    volumes:
+      - ./data/keycloak-db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${KC_DB_USER:-keycloak} -d ${KC_DB_NAME:-keycloak}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - cybercore-net
+
+  # Keycloak Identity Provider
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.0.5
+    container_name: cybercore-keycloak
+    restart: unless-stopped
+    depends_on:
+      keycloak-db:
+        condition: service_healthy
+    command: ["start"]
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.keycloak.rule=Host(`${KC_HOSTNAME:-auth.localhost}`)
+      - traefik.http.routers.keycloak.entrypoints=web
+      - traefik.http.services.keycloak.loadbalancer.server.port=8080
+    environment:
+      # Admin credentials
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KC_ADMIN_USER:-admin}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KC_ADMIN_PASS:-admin}
+      # Database
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://keycloak-db:5432/${KC_DB_NAME:-keycloak}
+      KC_DB_USERNAME: ${KC_DB_USER:-keycloak}
+      KC_DB_PASSWORD: ${KC_DB_PASS:-keycloak}
+      # HTTP settings
+      KC_HOSTNAME: ${KC_HOSTNAME:-auth.localhost}
+      KC_HTTP_ENABLED: "true"
+      KC_PROXY_HEADERS: xforwarded
+      KC_HTTP_RELATIVE_PATH: /
+      # Features
+      KC_FEATURES: token-exchange,admin-fine-grained-authz
+      KC_HEALTH_ENABLED: "true"
+      KC_METRICS_ENABLED: "true"
+      # Logging
+      KC_LOG_LEVEL: ${KC_LOG_LEVEL:-INFO}
+    volumes:
+      - ./auth/keycloak-themes:/opt/keycloak/themes
+      - ./auth/keycloak-providers:/opt/keycloak/providers
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8080/health/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+    networks:
+      - cybercore-net
+
   n8n:
     image: docker.n8n.io/n8nio/n8n
     restart: unless-stopped
