@@ -4,11 +4,12 @@ The official repo of the UA Cyber Saguaros CyberHub project.
 
 ## Project Description
 
-The Saguaros CyberHub is the official cybersecurity lab, cyber warfare range, and eLearning platform of the Cyber Saguaros, the University of Arizona's largest cybersecurity club. The CyberHub's purpose is split into three main goals that guide our effort throughout this project:
+The Saguaros CyberHub is the official cybersecurity lab, cyber warfare range, and eLearning platform of the Cyber Saguaros, the University of Arizona's largest cybersecurity club. The CyberHub's purpose is split a few main goals that guide our effort throughout this project:
 
 1. Provide club members with the opportunity to supplement their undergraduate and graduate-level coursework with hands-on offensive and defensive security training.
 2. Create a training model & environment for club Capture the Flag (CTF) teams.
-3. Stay free for club members.
+3. Open a virtual learning and compute environment for student, researcher, and faculty projects. 
+4. Stay free for club members.
 
 ## Project Ethos
 
@@ -41,7 +42,7 @@ Here are the main modules that will make up the CyberHub:
 
 ## Project Diagram
 
-![alt text](https://github.com/echumley/Saguaros-CyberHub/blob/main/resources/images/CyberHub-Architecture.png?raw=true)
+![alt text](https://github.com/echumley/Saguaros-CyberHub/blob/main/resources/images/CyberHub-Architecture-v1.0.png?raw=true)
 
 ## Project Roadmap
 
@@ -51,35 +52,45 @@ Here are the main modules that will make up the CyberHub:
 
 - [x] Network deployment
 - [x] Hardware deployment
-- [x] Authentication & domain controller deployment (Keycloak, FreeIPA, SSSD configured)
-- [x] Internal service template creation (VMs, Docker, K3s, etc.)
-- [x] Module nested virtualization template creation
-- [x] SIEM/SOAR deployment (Log ingestion stack, monitoring services)
-- [x] Deploy necessary other internal services (Vault, automation frameworks)
+- [ ] Authentication & domain controller deployment (Keycloak, FreeIPA, SSSD configured)
+- [ ] Internal service template creation (VMs, Docker, K3s, etc.)
+- [ ] Module nested virtualization template creation
+- [ ] SIEM/SOAR deployment (Log ingestion stack, monitoring services)
+- [ ] Deploy necessary other internal services (Vault, automation frameworks)
 
 ### Stage 2
 
-#### Goal: Crucible Proof of Concept
+#### Goal: CyberLabs Proof of Concept
 
-- [ ] Authentication stack deployment
-- [ ] Primary application deployment (ctfd or custom framework)
-- [ ] Crucible internal system
+- [ ] Authentication integration
+- [ ] Primary application deployment
+- [ ] CyberLabs internal system
 - [ ] Documentation upload and refinement
 - [ ] Proof of concept demonstration
 
 ### Stage 3
 
+#### Goal: Crucible Proof of Concept
+
+- [ ] Authentication integration
+- [ ] Primary application deployment (ctfd or custom framework)
+- [ ] Crucible internal system
+- [ ] Documentation upload and refinement
+- [ ] Proof of concept demonstration
+
+### Stage 4
+
 #### Goal: Alpha Launch & Private Deployment
 
-- [ ] Further development of CyberHub internal system
-- [ ] Secondary module deployments
-- [ ] Vulnerable machine development
+- [ ] Further development of CyberHub internal systems
+- [ ] Additional module deployments
+- [ ] Crucible vulnerable machine development
 - [ ] Pre-alpha testing & function verification
 - [ ] Alpha testing, feedback, and monitoring strategy development
 - [ ] Documentation refinement
 - [ ] Alpha launch & private deployment to UA Cyber Saguaros
 
-### Stage 4
+### Stage 5
 
 #### Goal: Beta Launch & Further Testing
 
@@ -91,7 +102,7 @@ Here are the main modules that will make up the CyberHub:
 - [ ] Documentation refinement
 - [ ] Beta launch & public deployment supported
 
-### Stage 5
+### Stage 6
 
 #### Goal: Release & Live Preview
 
@@ -106,11 +117,11 @@ Here are the main modules that will make up the CyberHub:
 
 ## Network Architecture
 
-![Saguaros CyberLab Network](https://github.com/echumley/Saguaros-CyberHub/blob/main/resources/images/SaguarosCyberLab-Network-v1.0.png?raw=true)
+![Saguaros CyberLab Network](https://github.com/echumley/Saguaros-CyberHub/blob/main/resources/images/CyberLabs-Network-v1.0.png?raw=true)
 
 ## Virtualization Infrastructure
 
-![CyberHub Virtualization](https://github.com/echumley/Saguaros-CyberHub/blob/main/resources/images/CyberHub-Virtualization.png?raw=true)
+![CyberHub Virtualization](https://github.com/echumley/Saguaros-CyberHub/blob/main/resources/images/CyberHub-Virtualization-v1.0.png?raw=true)
 
 ## Infrastructure & Automation
 

@@ -12,6 +12,8 @@ role_id
 secret_ide
 tempCodeRunnerFile.sh
 .claude/
+*.bkp
+*.backup
 
 # Added for install.sh
 /secrets/
