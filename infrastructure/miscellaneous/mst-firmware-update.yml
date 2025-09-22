@@ -1,0 +1,74 @@
+---
+- name: Install Mellanox MFT and optionally update NIC firmware
+  hosts: nodes
+  become: yes
+  gather_facts: yes
+  serial: 1
+
+  vars:
+    mft_version: "4.22.1-406"
+    mft_filename: "mft-{{ mft_version }}-x86_64-deb.tgz"
+    mft_url: "https://www.mellanox.com/downloads/MFT/{{ mft_filename }}"
+    mft_tmp_dir: "/tmp/mft-{{ mft_version }}-x86_64-deb"
+    mft_update_firmware: false
+
+  tasks:
+    - name: Ensure apt cache is current
+      ansible.builtin.apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Install required packages (headers must match running kernel)
+      ansible.builtin.apt:
+        name:
+          - "proxmox-headers-{{ ansible_kernel }}"
+          - dkms
+          - pciutils
+          - lsb-release
+          - make
+          - gcc
+          - alien
+          - wget
+          - tar
+        state: present
+
+    - name: Download MFT tarball
+      ansible.builtin.get_url:
+        url: "{{ mft_url }}"
+        dest: "/tmp/{{ mft_filename }}"
+        mode: '0644'
+
+    - name: Extract MFT tarball
+      ansible.builtin.unarchive:
+        src: "/tmp/{{ mft_filename }}"
+        dest: /tmp
+        remote_src: yes
+        creates: "{{ mft_tmp_dir }}"
+
+    - name: Run vendor installer
+      ansible.builtin.command: ./install.sh
+      args:
+        chdir: "{{ mft_tmp_dir }}"
+        creates: /usr/bin/mstflint
+      environment:
+        DEBIAN_FRONTEND: "noninteractive"
+
+    - name: Update Mellanox firmware to latest (optional)
+      ansible.builtin.command: mlxfwmanager --online -f -u
+      register: fw_update
+      when: mft_update_firmware
+      changed_when: "'No matching image found' not in fw_update.stdout"
+
+    - name: Query firmware after update
+      ansible.builtin.command: mlxfwmanager --query
+      register: fw_query
+      changed_when: false
+
+    - name: Show firmware query result
+      ansible.builtin.debug:
+        var: fw_query.stdout
+
+    - name: Reboot node if firmware was updated
+      ansible.builtin.reboot:
+        reboot_timeout: 600
+      when: mft_update_firmware and (fw_update is defined and fw_update.changed)

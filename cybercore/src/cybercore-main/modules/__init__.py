@@ -1,1 +1,0 @@
-# CyberCore modules

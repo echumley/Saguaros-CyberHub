@@ -15,6 +15,7 @@ tempCodeRunnerFile.sh
 *.bkp
 *.backup
 cyberprobe/
+.cybercore-backup/
 
 # Added for install.sh
 /secrets/
