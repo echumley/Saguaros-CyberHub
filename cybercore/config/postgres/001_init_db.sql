@@ -23,7 +23,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS ux_app_user_email_lower ON app_user (lower(ema
 
 -- === Groups (text key) ===
 CREATE TABLE IF NOT EXISTS app_group (
-  key         TEXT PRIMARY KEY,            -- 'cyberlabs','crucible','forge','university'
+  key         TEXT PRIMARY KEY,            -- 'cyberlabs','crucible','forge','university','library','wiki'
   label       TEXT,
   created_at  TIMESTAMPTZ NOT NULL DEFAULT now()
 );
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS user_group (
 
 -- === Modules (text key) ===
 CREATE TABLE IF NOT EXISTS module (
-  key     TEXT PRIMARY KEY,                -- 'cyberlabs','crucible','forge','university'
+  key     TEXT PRIMARY KEY,                -- 'cyberlabs','crucible','forge','university','library','wiki'
   name    TEXT NOT NULL,
   active  BOOLEAN NOT NULL DEFAULT TRUE
 );
@@ -103,14 +103,18 @@ INSERT INTO module (key, name, active) VALUES
   ('cyberlabs',  'CyberLabs', TRUE),
   ('crucible',   'The Crucible', TRUE),
   ('forge',      'The Forge', TRUE),
-  ('university', 'Saguaros University', TRUE)
+  ('university', 'Saguaros University', TRUE),
+  ('library',    'The Library', TRUE),
+  ('cyberwiki',  'CyberWiki', TRUE)
 ON CONFLICT (key) DO NOTHING;
 
 INSERT INTO app_group (key, label, created_at) VALUES
   ('cyberlabs',  'CyberLabs', now()),
   ('crucible',   'The Crucible', now()),
   ('forge',      'The Forge', now()),
-  ('university', 'Saguaros University', now())
+  ('university', 'Saguaros University', now()),
+  ('library',    'The Library', now()),
+  ('cyberwiki',  'CyberWiki', now())
 ON CONFLICT (key) DO NOTHING;
 
 -- Global badges (module_key = NULL)

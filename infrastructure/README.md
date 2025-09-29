@@ -36,13 +36,13 @@ This is a general layout of the network.
 
 ### Subnets
 
+`100.64-99.0.0/16` - Student project infrastructure \
 `100.100.0.0/16` - CyberCore & CyberHub infrastructure \
 `100.101.0.0/16` - CyberLabs infrastructure \
 `100.102.0.0/16` - Crucible infrastructure \
 `100.103.0.0/16` - Forge infrastructure \
-`100.104-149.0.0/16` - Unused \
-`100.150-199.0.0/16` - Student project infrastructure \
-`100.200-254.0.0/16` - Remote site infrastructure
+`100.104-119.0.0/16` - Unused \
+`100.120-127.0.0/16` - Remote site infrastructure
 
 ### VLANs
 
